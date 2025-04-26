@@ -1,23 +1,23 @@
-import { Button } from "@/components/ui/button";
-import { type Row } from "@tanstack/react-table";
-import { Loader2, Zap } from "lucide-react";
-import { type History } from "../columns";
-import { BaseError, useAccount, useWriteContract } from "wagmi";
-import { useIsRegistered } from "@/hooks/use-is-registered";
-import { useGetCreatorInfoByAddress } from "@/hooks/use-get-creator-info-by-address";
 import { TipKuAbi } from "@/abi/TipKu";
-import { parseEther } from "viem";
-import toast from "react-hot-toast";
-import { UniversalTipKuAddress } from "@/constants";
 import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { UniversalTipKuAddress } from "@/constants";
+import { useGetCreatorInfoByAddress } from "@/hooks/use-get-creator-info-by-address";
+import { useIsRegisteredByAddress } from "@/hooks/use-is-registered-by-address";
 import { config } from "@/lib/wagmi";
+import { type Row } from "@tanstack/react-table";
 import { waitForTransactionReceipt } from "@wagmi/core";
+import { Loader2, Zap } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { parseEther } from "viem";
+import { BaseError, useAccount, useWriteContract } from "wagmi";
+import { type History } from "../columns";
 
 export const ActionCell = ({ row }: { row: Row<History> }) => {
   const accountResult = useAccount();
 
-  const isRegisteredResult = useIsRegistered(accountResult.address);
+  const isRegisteredResult = useIsRegisteredByAddress(accountResult.address);
 
   const creatorInfoResult = useGetCreatorInfoByAddress(accountResult.address);
 
@@ -70,14 +70,14 @@ export const ActionCell = ({ row }: { row: Row<History> }) => {
           onError: (error) => {
             toast.error(
               (error as BaseError).details ||
-                "Failed to trigger tip. See console for detailed error.",
+                "Failed to trigger tip. See console for detailed error."
             );
 
             console.error(error.message);
 
             setIsLoading(false);
           },
-        },
+        }
       );
     } else {
       if (!accountResult.address) {
@@ -111,14 +111,14 @@ export const ActionCell = ({ row }: { row: Row<History> }) => {
           onError: (error) => {
             toast.error(
               (error as BaseError).details ||
-                "Failed to trigger tip. See console for detailed error.",
+                "Failed to trigger tip. See console for detailed error."
             );
 
             console.error(error.message);
 
             setIsLoading(false);
           },
-        },
+        }
       );
     }
   };
