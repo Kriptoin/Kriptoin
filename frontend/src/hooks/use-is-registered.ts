@@ -1,13 +1,8 @@
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
-import { UniversalTipKuAddress } from "@/constants";
-import { useReadContract } from "wagmi";
+import { useAccount } from "wagmi";
+import { useIsRegisteredByAddress } from "./use-is-registered-by-address";
 
-export const useIsRegistered = (address: `0x${string}` | undefined) => {
-  return useReadContract({
-    abi: UniversalTipKuAbi,
-    address: UniversalTipKuAddress,
-    functionName: "isRegistered",
-    args: [address!],
-    query: { enabled: !!address },
-  });
+export const useIsRegistered = () => {
+  const account = useAccount();
+
+  return useIsRegisteredByAddress(account.address);
 };
