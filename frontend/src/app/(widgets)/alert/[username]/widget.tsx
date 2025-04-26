@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { UniversalTipKuAddress } from "@/constants";
 import { useGetColors } from "@/hooks/use-get-colors";
 import { useGetCreatorInfoByUsername } from "@/hooks/use-get-creator-info-by-username";
-import { useGetDuration } from "@/hooks/use-get-duration";
-import { useIsRegistered } from "@/hooks/use-is-registered";
+import { useGetDurationByContractAddress } from "@/hooks/use-get-duration-by-contract-address";
+import { useIsRegisteredByAddress } from "@/hooks/use-is-registered-by-address";
 import { config } from "@/lib/wagmi";
 import { getBlockNumber } from "@wagmi/core";
 import { useEffect, useState } from "react";
@@ -29,8 +29,8 @@ export default function Widget({ username }: { username: string }) {
   const [currentMessage, setCurrentMessage] = useState<Message | null>(null);
   const [isError, setIsError] = useState<boolean>(false);
 
-  const isRegisteredResult = useIsRegistered(
-    isAddress(username) ? username : undefined,
+  const isRegisteredResult = useIsRegisteredByAddress(
+    isAddress(username) ? username : undefined
   );
 
   const colorsResult = useGetColors({
@@ -38,7 +38,7 @@ export default function Widget({ username }: { username: string }) {
       result.status === "success" ? result.contractAddress : undefined,
   });
 
-  const durationResult = useGetDuration({
+  const durationResult = useGetDurationByContractAddress({
     contractAddress:
       result.status === "success" ? result.contractAddress : undefined,
   });

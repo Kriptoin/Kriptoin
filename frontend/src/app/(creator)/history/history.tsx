@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { UniversalTipKuAddress } from "@/constants";
 import { useGetCreatorInfoByAddress } from "@/hooks/use-get-creator-info-by-address";
-import { useIsRegistered } from "@/hooks/use-is-registered";
+import { useIsRegisteredByAddress } from "@/hooks/use-is-registered-by-address";
 import { useAccount } from "wagmi";
 import { HistoryTable } from "./history-table";
 
@@ -18,7 +18,7 @@ export default function History() {
 
   const creatorInfoResult = useGetCreatorInfoByAddress(accountResult.address);
 
-  const isRegisteredResult = useIsRegistered(accountResult.address);
+  const isRegisteredResult = useIsRegisteredByAddress(accountResult.address);
 
   const contractAddress =
     creatorInfoResult.status === "success"

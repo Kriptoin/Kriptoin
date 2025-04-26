@@ -13,7 +13,7 @@ import Loading from "@/components/ui/loading";
 import { useGetCreatorInfoByAddress } from "@/hooks/use-get-creator-info-by-address";
 import { useGetCreatorStats } from "@/hooks/use-get-creator-stats";
 import { useGetUnregisteredCreatorStats } from "@/hooks/use-get-unregistered-creator-stats";
-import { useIsRegistered } from "@/hooks/use-is-registered";
+import { useIsRegisteredByAddress } from "@/hooks/use-is-registered-by-address";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 
@@ -22,7 +22,7 @@ export default function Dashboard({ baseUrl }: { baseUrl: string }) {
 
   const creatorInfoResult = useGetCreatorInfoByAddress(accountResult.address);
 
-  const isRegisteredResult = useIsRegistered(accountResult.address);
+  const isRegisteredResult = useIsRegisteredByAddress(accountResult.address);
 
   const statsResult = useGetCreatorStats(
     creatorInfoResult.status === "success"

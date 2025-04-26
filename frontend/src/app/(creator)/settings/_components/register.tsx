@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
 import { UniversalTipKuAddress } from "@/constants";
-import { useIsRegistered } from "@/hooks/use-is-registered";
+import { useIsRegisteredByAddress } from "@/hooks/use-is-registered-by-address";
 import { config } from "@/lib/wagmi";
 import { useQueryClient } from "@tanstack/react-query";
 import { waitForTransactionReceipt } from "@wagmi/core";
@@ -23,7 +23,7 @@ import { BaseError, useAccount, useWriteContract } from "wagmi";
 
 export default function Register() {
   const account = useAccount();
-  const isRegisteredResult = useIsRegistered(account.address);
+  const isRegisteredResult = useIsRegisteredByAddress(account.address);
 
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -66,13 +66,13 @@ export default function Register() {
         onError: (error) => {
           toast.error(
             (error as BaseError).details ||
-              "Failed to register. See console for detailed error.",
+              "Failed to register. See console for detailed error."
           );
 
           console.error(error.message);
           setIsLoading(false);
         },
-      },
+      }
     );
   };
 
