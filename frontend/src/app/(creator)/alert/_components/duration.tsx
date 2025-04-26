@@ -15,27 +15,36 @@ import { config } from "@/lib/wagmi";
 import { Save } from "lucide-react";
 import { useTxHash } from "@/hooks/use-tx-hash";
 import { TxButton } from "../../_components/tx-button";
+import { UseGetDurationReturnType } from "@/hooks/use-get-duration";
+import { ErrorCard } from "./error-card";
+import { useGetCreatorInfo } from "@/hooks/use-get-creator-info";
+import { LoadingCard } from "./loading-card";
+import { RegisterCard } from "./register-card";
 
 export const Duration = ({
-  currentDuration,
+  duration,
   contractAddress,
 }: {
-  currentDuration: number;
+  duration: UseGetDurationReturnType;
   contractAddress?: `0x${string}`;
 }) => {
-  const [duration, setDuration] = useState(currentDuration);
+  const [currentDuration, setCurrentDuration] = useState(() =>
+    duration.status === "success" ? duration.duration : 5,
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const { txHash, setTxHashWithTimeout } = useTxHash();
 
   const { writeContract } = useWriteContract();
 
+  const creatorInfo = useGetCreatorInfo();
+
   const handleDurationChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, min, max } = event.target;
 
     let newValue = Math.max(Number(min), Math.min(Number(max), Number(value)));
 
-    setDuration(newValue);
+    setCurrentDuration(newValue);
   };
 
   const handleSaveDuration = (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,7 +62,7 @@ export const Duration = ({
         abi: TipKuAbi,
         address: contractAddress,
         functionName: "setMessageDuration",
-        args: [duration],
+        args: [currentDuration],
       },
       {
         onSuccess: async (data) => {
@@ -70,16 +79,26 @@ export const Duration = ({
         onError: (error) => {
           toast.error(
             (error as BaseError).details ||
-              "Failed to update duration. See console for detailed error."
+              "Failed to update duration. See console for detailed error.",
           );
 
           console.error(error.message);
 
           setIsLoading(false);
         },
-      }
+      },
     );
   };
+
+  if (duration.status === "error") return <ErrorCard title="Duration" />;
+
+  if (
+    creatorInfo.status === "pending" ||
+    (creatorInfo.status === "success" && duration.status === "pending")
+  )
+    return <LoadingCard title="Duration" />;
+
+  if (duration.status === "pending") return <RegisterCard title="Duration" />;
 
   return (
     <Card>
@@ -103,7 +122,7 @@ export const Duration = ({
             type="number"
             required
             onChange={handleDurationChange}
-            value={duration}
+            value={currentDuration}
           />
           <TxButton
             isLoading={isLoading}

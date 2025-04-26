@@ -18,20 +18,19 @@ import { useTxHash } from "@/hooks/use-tx-hash";
 import { TxButton } from "../../_components/tx-button";
 import { BaseError } from "wagmi";
 import { TipKuAbi } from "@/abi/TipKu";
-
-interface WidgetColorsProps {
-  contractAddress: `0x${string}`;
-  colors: {
-    primary: string;
-    secondary: string;
-    background: string;
-  };
-}
+import { UseGetColorsReturnType } from "@/hooks/use-get-colors";
+import { ErrorCard } from "./error-card";
+import { useGetCreatorInfo } from "@/hooks/use-get-creator-info";
+import { LoadingCard } from "./loading-card";
+import { RegisterCard } from "./register-card";
 
 export const WidgetColors = ({
-  contractAddress,
   colors,
-}: WidgetColorsProps) => {
+  contractAddress,
+}: {
+  colors: UseGetColorsReturnType;
+  contractAddress: `0x${string}` | undefined;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { txHash, setTxHashWithTimeout } = useTxHash();
@@ -40,7 +39,14 @@ export const WidgetColors = ({
 
   const { writeContract } = useWriteContract();
 
+  const creatorInfo = useGetCreatorInfo();
+
   const handleSaveColors = () => {
+    if (!contractAddress) {
+      toast.error("Contract address is missing");
+      return;
+    }
+
     setIsLoading(true);
 
     writeContract(
@@ -65,52 +71,58 @@ export const WidgetColors = ({
         onError: (error) => {
           toast.error(
             (error as BaseError).details ||
-              "Failed to save colors. See console for detailed error."
+              "Failed to save colors. See console for detailed error.",
           );
 
           console.error(error);
 
           setIsLoading(false);
         },
-      }
+      },
     );
   };
 
-  const realtimeColors = useMemo(
-    () => ({
-      primary: primaryColor ? primaryColor : colors.primary,
-      secondary: secondaryColor ? secondaryColor : colors.secondary,
-      background: backgroundColor ? backgroundColor : colors.background,
-    }),
-    [primaryColor, secondaryColor, backgroundColor]
-  );
+  if (colors.status === "error") return <ErrorCard title="Alert colors " />;
+
+  if (
+    creatorInfo.status === "pending" ||
+    (creatorInfo.status === "success" && colors.status === "pending")
+  )
+    return <LoadingCard title="Alert colors" />;
+
+  if (colors.status === "pending") return <RegisterCard title="Alert colors" />;
+
+  const realtimeColors = {
+    primary: primaryColor ? primaryColor : colors.colors.primary,
+    secondary: secondaryColor ? secondaryColor : colors.colors.secondary,
+    background: backgroundColor ? backgroundColor : colors.colors.background,
+  };
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Alert colors</CardTitle>
         <CardDescription>
-          Change alert colors based on your preference. This action requires a
-          small transaction fee (~0.0001 EDU).
+          Change alert colors based on your preference.
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
           <ExampleAlert colors={realtimeColors} />
           <ColorPicker
-            initialColor={colors.primary}
+            initialColor={colors.colors.primary}
             title="Primary Color"
             description="The primary color for your alert."
             type="primary"
           />
           <ColorPicker
-            initialColor={colors.secondary}
+            initialColor={colors.colors.secondary}
             title="Secondary Color"
             description="The secondary color for your alert."
             type="secondary"
           />
           <ColorPicker
-            initialColor={colors.background}
+            initialColor={colors.colors.background}
             title="Background Color"
             description="The background color for your alert."
             type="background"

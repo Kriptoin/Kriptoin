@@ -6,32 +6,29 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useGetCreatorInfoByAddress } from "@/hooks/use-get-creator-info-by-address";
+import { UseGetCreatorInfoReturnType } from "@/hooks/use-get-creator-info-by-address";
 import { useTxHash } from "@/hooks/use-tx-hash";
 import { config } from "@/lib/wagmi";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { NotebookPen, Send } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { BaseError, useAccount, useWriteContract } from "wagmi";
+import { BaseError, useWriteContract } from "wagmi";
 import { TxButton } from "../../_components/tx-button";
-import Loading from "@/components/ui/loading";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { RegisterCard } from "./register-card";
 import { LoadingCard } from "./loading-card";
 
-export const TestTip = () => {
+export const TestTip = ({
+  creatorInfo,
+}: {
+  creatorInfo: UseGetCreatorInfoReturnType;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const { txHash, setTxHashWithTimeout } = useTxHash();
 
-  const account = useAccount();
-
-  const creatorInfo = useGetCreatorInfoByAddress(account.address);
-
   const { writeContract } = useWriteContract();
-  
+
   if (creatorInfo.status === "pending")
     return <LoadingCard title="Send Test Tip" />;
 
