@@ -1,23 +1,10 @@
 import { useReadContract } from "wagmi";
-import { ErrorReturnType, PendingReturnType } from "./types";
 import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
 import { UniversalTipKuAddress } from "@/constants";
-
-interface SuccessReturnType {
-  status: "success";
-  username: string;
-  name: string;
-  creatorAddress: `0x${string}`;
-  contractAddress: `0x${string}`;
-}
-
-type UseGetCreatorInfoReturnType =
-  | SuccessReturnType
-  | ErrorReturnType
-  | PendingReturnType;
+import { UseGetCreatorInfoReturnType } from "./use-get-creator-info";
 
 export const useGetCreatorInfoByAddress = (
-  address: `0x${string}` | undefined
+  address: `0x${string}` | undefined,
 ): UseGetCreatorInfoReturnType => {
   const result = useReadContract({
     abi: UniversalTipKuAbi,
