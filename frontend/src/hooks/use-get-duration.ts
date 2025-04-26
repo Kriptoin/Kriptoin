@@ -1,38 +1,22 @@
-import { TipKuAbi } from "@/abi/TipKu";
-import { useReadContract } from "wagmi";
 import { ErrorReturnType, PendingReturnType } from "./types";
+import { useGetCreatorInfo } from "./use-get-creator-info";
+import { useGetDurationByContractAddress } from "./use-get-duration-by-contract-address";
 
 interface SuccessReturnType {
   status: "success";
   duration: number;
 }
 
-type UseGetDurationReturnType =
+export type UseGetDurationReturnType =
   | SuccessReturnType
   | ErrorReturnType
   | PendingReturnType;
 
-export const useGetDuration = ({
-  contractAddress,
-}: {
-  contractAddress?: `0x${string}`;
-}): UseGetDurationReturnType => {
-  const result = useReadContract({
-    abi: TipKuAbi,
-    address: contractAddress,
-    functionName: "messageDuration",
-    query: {
-      enabled: !!contractAddress,
-    },
-  });
+export const useGetDuration = (): UseGetDurationReturnType => {
+  const creatorInfo = useGetCreatorInfo();
 
-  if (result.status === "pending") {
-    return { status: "pending" };
-  }
+  const contractAddress =
+    creatorInfo.status === "success" ? creatorInfo.contractAddress : undefined;
 
-  if (result.status === "error") {
-    return { status: "error", errorMessage: result.error.message };
-  }
-
-  return { status: "success", duration: result.data };
+  return useGetDurationByContractAddress({ contractAddress });
 };
