@@ -1,5 +1,5 @@
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
 import { formatEther } from "viem";
+import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
 import { useReadContract } from "wagmi";
 import { ErrorReturnType, PendingReturnType } from "./types";
 
@@ -36,7 +36,7 @@ export const useGetUniversalTipHistory = ({
   pageSize,
 }: UseGetUniversalTipHistoryProps): UseGetUniversalTipHistoryReturnType => {
   const result = useReadContract({
-    abi: UniversalTipKuAbi,
+    abi: UniversalKriptoinAbi,
     address: contractAddress,
     functionName: "getTipHistory",
     query: {

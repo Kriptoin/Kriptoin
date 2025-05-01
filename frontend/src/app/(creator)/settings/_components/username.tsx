@@ -1,6 +1,6 @@
 "use client";
 
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
+import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { UniversalTipKuAddress } from "@/constants";
+import { UniversalKriptoinAddress } from "@/constants";
 import { useTxHash } from "@/hooks/use-tx-hash";
 import { config } from "@/lib/wagmi";
 import { useQueryClient } from "@tanstack/react-query";
@@ -41,8 +41,8 @@ export default function Username({
 
     writeContract(
       {
-        abi: UniversalTipKuAbi,
-        address: UniversalTipKuAddress,
+        abi: UniversalKriptoinAbi,
+        address: UniversalKriptoinAddress,
         functionName: "changeUsername",
         args: [username],
       },
@@ -83,8 +83,7 @@ export default function Username({
         <CardTitle>Update username</CardTitle>
         <CardDescription>
           <div>
-            Update your current username. This action requires a small
-            transaction fee (~0.0001 EDU).
+            Update your current username.
           </div>
           <div>
             Username must be between 3 and 10 characters long. Username can only

@@ -1,4 +1,4 @@
-export const TipKuAbi = [
+export const KriptoinAbi = [
   {
     inputs: [
       {
@@ -10,43 +10,6 @@ export const TipKuAbi = [
         internalType: "uint256",
         name: "_totalTipsReceived",
         type: "uint256",
-      },
-      {
-        components: [
-          {
-            internalType: "address",
-            name: "recipientAddress",
-            type: "address",
-          },
-          {
-            internalType: "address",
-            name: "senderAddress",
-            type: "address",
-          },
-          {
-            internalType: "string",
-            name: "senderName",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "message",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "amount",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "timestamp",
-            type: "uint256",
-          },
-        ],
-        internalType: "struct ITipKu.Tip[]",
-        name: "_tips",
-        type: "tuple[]",
       },
       {
         internalType: "uint256",
@@ -114,6 +77,12 @@ export const TipKuAbi = [
         type: "address",
       },
       {
+        indexed: true,
+        internalType: "bool",
+        name: "fakeTip",
+        type: "bool",
+      },
+      {
         indexed: false,
         internalType: "string",
         name: "senderName",
@@ -133,31 +102,18 @@ export const TipKuAbi = [
       },
       {
         indexed: false,
+        internalType: "uint8",
+        name: "feePercentage",
+        type: "uint8",
+      },
+      {
+        indexed: false,
         internalType: "uint256",
         name: "timestamp",
         type: "uint256",
       },
     ],
     name: "TipReceived",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "Withdraw",
     type: "event",
   },
   {
@@ -294,12 +250,17 @@ export const TipKuAbi = [
             type: "uint256",
           },
           {
+            internalType: "uint8",
+            name: "feePercentage",
+            type: "uint8",
+          },
+          {
             internalType: "uint256",
             name: "timestamp",
             type: "uint256",
           },
         ],
-        internalType: "struct ITipKu.Tip[]",
+        internalType: "struct IKriptoin.Tip[]",
         name: "paginatedTips",
         type: "tuple[]",
       },
@@ -307,6 +268,19 @@ export const TipKuAbi = [
         internalType: "uint256",
         name: "totalTips",
         type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "isEnabled",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
       },
     ],
     stateMutability: "view",
@@ -445,12 +419,38 @@ export const TipKuAbi = [
   {
     inputs: [
       {
+        internalType: "bool",
+        name: "_status",
+        type: "bool",
+      },
+    ],
+    name: "setEnabled",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint8",
         name: "_seconds",
         type: "uint8",
       },
     ],
     name: "setMessageDuration",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "setMinimumTipAmount",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -477,13 +477,6 @@ export const TipKuAbi = [
       },
     ],
     name: "transferOwnership",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "withdraw",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

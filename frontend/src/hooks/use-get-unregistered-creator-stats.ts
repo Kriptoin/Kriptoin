@@ -1,5 +1,5 @@
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
-import { UniversalTipKuAddress } from "@/constants";
+import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
+import { UniversalKriptoinAddress } from "@/constants";
 import { useReadContracts } from "wagmi";
 import { ErrorReturnType, PendingReturnType } from "./types";
 
@@ -20,14 +20,14 @@ export const useGetUnregisteredCreatorStats = (
   const result = useReadContracts({
     contracts: [
       {
-        abi: UniversalTipKuAbi,
-        address: UniversalTipKuAddress,
+        abi: UniversalKriptoinAbi,
+        address: UniversalKriptoinAddress,
         functionName: "getTipCount",
         args: [creatorAddress!],
       },
       {
-        abi: UniversalTipKuAbi,
-        address: UniversalTipKuAddress,
+        abi: UniversalKriptoinAbi,
+        address: UniversalKriptoinAddress,
         functionName: "totalTipsReceived",
         args: [creatorAddress!],
       },

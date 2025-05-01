@@ -1,9 +1,9 @@
 "use client";
 
-import { TipKuAbi } from "@/abi/TipKu";
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
+import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { UniversalTipKuAddress } from "@/constants";
+import { UniversalKriptoinAddress } from "@/constants";
 import { useGetColors } from "@/hooks/use-get-colors";
 import { useGetCreatorInfoByUsername } from "@/hooks/use-get-creator-info-by-username";
 import { useGetDurationByContractAddress } from "@/hooks/use-get-duration-by-contract-address";
@@ -64,8 +64,8 @@ export default function Widget({ username }: { username: string }) {
   }, [isError]);
 
   useWatchContractEvent({
-    abi: UniversalTipKuAbi,
-    address: UniversalTipKuAddress,
+    abi: UniversalKriptoinAbi,
+    address: UniversalKriptoinAddress,
     eventName: "TipReceived",
     args: {
       recipientAddress: isAddress(username) ? username : zeroAddress,
@@ -89,7 +89,7 @@ export default function Widget({ username }: { username: string }) {
   });
 
   useWatchContractEvent({
-    abi: TipKuAbi,
+    abi: KriptoinAbi,
     address: result.status === "success" ? result.contractAddress : zeroAddress,
     eventName: "TipReceived",
     onError: (error) => {

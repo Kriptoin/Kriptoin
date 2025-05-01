@@ -1,4 +1,4 @@
-import { TipKuAbi } from "@/abi/TipKu";
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
 import { useReadContract } from "wagmi";
 import { ErrorReturnType, PendingReturnType } from "./types";
 
@@ -22,7 +22,7 @@ export const useGetColors = ({
   contractAddress: `0x${string}` | undefined;
 }): UseGetColorsReturnType => {
   const result = useReadContract({
-    abi: TipKuAbi,
+    abi: KriptoinAbi,
     address: contractAddress,
     functionName: "getColors",
     query: {

@@ -1,14 +1,14 @@
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
-import { UniversalTipKuAddress } from "@/constants";
+import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
+import { UniversalKriptoinAddress } from "@/constants";
 import { useReadContract } from "wagmi";
 import { UseGetCreatorInfoReturnType } from "./use-get-creator-info";
 
 export const useGetCreatorInfoByUsername = (
-  username: string,
+  username: string
 ): UseGetCreatorInfoReturnType => {
   const result = useReadContract({
-    abi: UniversalTipKuAbi,
-    address: UniversalTipKuAddress,
+    abi: UniversalKriptoinAbi,
+    address: UniversalKriptoinAddress,
     functionName: "creatorInfoByUsername",
     args: [username],
   });

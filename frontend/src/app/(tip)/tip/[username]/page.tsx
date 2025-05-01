@@ -10,7 +10,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { username } = await params;
   return {
-    title: isAddress(username) ? "TipKu" : `${username} | TipKu`,
+    title: isAddress(username) ? "Kriptoin" : `${username} | Kriptoin`,
   };
 }
 

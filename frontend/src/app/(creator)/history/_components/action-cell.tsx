@@ -1,7 +1,7 @@
-import { TipKuAbi } from "@/abi/TipKu";
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
+import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
 import { Button } from "@/components/ui/button";
-import { UniversalTipKuAddress } from "@/constants";
+import { UniversalKriptoinAddress } from "@/constants";
 import { useGetCreatorInfoByAddress } from "@/hooks/use-get-creator-info-by-address";
 import { useIsRegisteredByAddress } from "@/hooks/use-is-registered-by-address";
 import { config } from "@/lib/wagmi";
@@ -53,7 +53,7 @@ export const ActionCell = ({ row }: { row: Row<History> }) => {
       writeContract(
         {
           address: contractAddress,
-          abi: TipKuAbi,
+          abi: KriptoinAbi,
           functionName: "emitTipEvent",
           args: [senderName, message, parseEther(amount)],
         },
@@ -88,8 +88,8 @@ export const ActionCell = ({ row }: { row: Row<History> }) => {
 
       writeContract(
         {
-          address: UniversalTipKuAddress,
-          abi: UniversalTipKuAbi,
+          address: UniversalKriptoinAddress,
+          abi: UniversalKriptoinAbi,
           functionName: "emitTipEvent",
           args: [
             accountResult.address,

@@ -4,12 +4,12 @@ pragma solidity ^0.8.20;
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import "./UniversalTipKu.sol";
-import "./interfaces/ITipKu.sol";
-import "./libraries/TipKuLib.sol";
+import "./UniversalKriptoin.sol";
+import "./interfaces/IKriptoin.sol";
+import "./libraries/KriptoinLib.sol";
 import "./libraries/StringUtils.sol";
 
-contract TipKu is Ownable, ITipKu {
+contract Kriptoin is Ownable, IKriptoin {
     using StringUtils for string;
 
     Tip[] private tips;
@@ -27,7 +27,6 @@ contract TipKu is Ownable, ITipKu {
     constructor(
         address _factoryAddress,
         uint256 _totalTipsReceived,
-        Tip[] memory _tips,
         uint256 _minimumTipAmount
     ) Ownable(msg.sender) {
         factoryAddress = _factoryAddress;
@@ -39,19 +38,13 @@ contract TipKu is Ownable, ITipKu {
 
         messageDuration = 5;
 
-        if (_tips.length > 0) {
-            for (uint256 i = 0; i < _tips.length; i++) {
-                tips.push(_tips[i]);
-            }
-        }
-
         minimumTipAmount = _minimumTipAmount;
         isEnabled = true;
     }
 
     /// @dev Function to get the token
     function _getToken() internal view returns (IERC20) {
-        return UniversalTipKu(factoryAddress).token();
+        return UniversalKriptoin(factoryAddress).token();
     }
 
     // @dev Function to set the minimum tip amount
@@ -77,7 +70,7 @@ contract TipKu is Ownable, ITipKu {
             recipientAddress: owner(),
             senderAddress: owner(),
             fakeTip: true,
-            senderName: "TipKu",
+            senderName: "Kriptoin",
             message: "This is a test tip",
             amount: 10000 ether,
             feePercentage: 1,
@@ -94,10 +87,7 @@ contract TipKu is Ownable, ITipKu {
         string calldata message,
         uint256 amount
     ) external {
-        require(
-            isEnabled,
-            "Tipping is disabled"
-        );
+        require(isEnabled, "Tipping is disabled");
 
         require(
             _getToken().balanceOf(msg.sender) >= amount,
@@ -114,13 +104,17 @@ contract TipKu is Ownable, ITipKu {
             "Message must be between 1 and 250 characters"
         );
 
-        uint8 feePercentage = UniversalTipKu(factoryAddress).feePercentage();
+        uint8 feePercentage = UniversalKriptoin(factoryAddress).feePercentage();
 
         uint256 fee = (amount * feePercentage) / 100;
 
         uint256 amountAfterFee = amount - fee;
 
-        bool sent1 = _getToken().transferFrom(msg.sender, owner(), amountAfterFee);
+        bool sent1 = _getToken().transferFrom(
+            msg.sender,
+            owner(),
+            amountAfterFee
+        );
 
         require(sent1, "Failed to send tip");
 
@@ -185,7 +179,7 @@ contract TipKu is Ownable, ITipKu {
     ) external view returns (Tip[] memory paginatedTips, uint256 totalTips) {
         totalTips = tips.length;
 
-        paginatedTips = TipKuLib.getTipHistory(
+        paginatedTips = KriptoinLib.getTipHistory(
             tips,
             totalTips,
             pageIndex,

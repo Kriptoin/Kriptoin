@@ -1,3 +1,4 @@
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
 import {
   Card,
   CardContent,
@@ -6,18 +7,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ChangeEvent, useState } from "react";
-import { BaseError, useWriteContract } from "wagmi";
-import { TipKuAbi } from "@/abi/TipKu";
-import toast from "react-hot-toast";
-import { waitForTransactionReceipt } from "@wagmi/core";
-import { config } from "@/lib/wagmi";
-import { Save } from "lucide-react";
-import { useTxHash } from "@/hooks/use-tx-hash";
-import { TxButton } from "../../_components/tx-button";
-import { UseGetDurationReturnType } from "@/hooks/use-get-duration";
-import { ErrorCard } from "./error-card";
 import { useGetCreatorInfo } from "@/hooks/use-get-creator-info";
+import { UseGetDurationReturnType } from "@/hooks/use-get-duration";
+import { useTxHash } from "@/hooks/use-tx-hash";
+import { config } from "@/lib/wagmi";
+import { waitForTransactionReceipt } from "@wagmi/core";
+import { Save } from "lucide-react";
+import { ChangeEvent, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { BaseError, useWriteContract } from "wagmi";
+import { TxButton } from "../../_components/tx-button";
+import { ErrorCard } from "./error-card";
 import { LoadingCard } from "./loading-card";
 import { RegisterCard } from "./register-card";
 
@@ -28,9 +28,7 @@ export const Duration = ({
   duration: UseGetDurationReturnType;
   contractAddress?: `0x${string}`;
 }) => {
-  const [currentDuration, setCurrentDuration] = useState(() =>
-    duration.status === "success" ? duration.duration : 5,
-  );
+  const [currentDuration, setCurrentDuration] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
 
   const { txHash, setTxHashWithTimeout } = useTxHash();
@@ -38,6 +36,12 @@ export const Duration = ({
   const { writeContract } = useWriteContract();
 
   const creatorInfo = useGetCreatorInfo();
+
+  useEffect(() => {
+    if (duration.status === "success") {
+      setCurrentDuration(duration.duration);
+    }
+  }, [duration.status]);
 
   const handleDurationChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, min, max } = event.target;
@@ -59,7 +63,7 @@ export const Duration = ({
 
     writeContract(
       {
-        abi: TipKuAbi,
+        abi: KriptoinAbi,
         address: contractAddress,
         functionName: "setMessageDuration",
         args: [currentDuration],
@@ -106,7 +110,6 @@ export const Duration = ({
         <CardTitle>Duration</CardTitle>
         <CardDescription>
           Set the duration of a tip message displayed on-screen (in seconds).
-          This action requires a small transaction fee (~0.0001 EDU).
         </CardDescription>
       </CardHeader>
       <CardContent>

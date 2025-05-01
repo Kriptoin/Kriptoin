@@ -1,4 +1,4 @@
-import { TipKuAbi } from "@/abi/TipKu";
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
 import { useReadContract } from "wagmi";
 import { ErrorReturnType, PendingReturnType } from "./types";
 
@@ -18,7 +18,7 @@ export const useGetBio = ({
   contractAddress: `0x${string}` | undefined;
 }): UseGetBioReturnType => {
   const result = useReadContract({
-    abi: TipKuAbi,
+    abi: KriptoinAbi,
     address: contractAddress,
     functionName: "bio",
     query: {

@@ -1,10 +1,10 @@
-export const UniversalTipKuAddress =
-  "0xBF8423cE0A74920d85c3170b1dD250d0aA041abe";
+export const UniversalKriptoinAddress =
+  "0x7f266B571dB9AF387f12351236dFaC9E671e8d03";
 
-export const IDRXTokenAddress = "0x3C361ccb8ED62468717EE7dF522d2d9Bc48a2A06";
+export const IDRXTokenAddress = "0xE66b474FDd3958bF7E25Fd189a62f911C6fCf384";
 
 export const FaucetContractAddress =
-  "0x78666a703644DB746A5A667faC1848D9C2947891";
+  "0x2E64FC627140D27609616BA68d35147226DFAA8c";
 
 export const EXPLORER_TX_BASE_URL =
   process.env.NODE_ENV === "production"

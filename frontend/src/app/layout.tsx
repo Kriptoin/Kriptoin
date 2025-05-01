@@ -12,7 +12,7 @@ const font = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "TipKu",
+  title: "Kriptoin",
 };
 
 export default async function RootLayout(props: { children: ReactNode }) {

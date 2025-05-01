@@ -53,7 +53,7 @@ export default function SideNavItems() {
       </div>
       <div className="flex flex-col gap-2">
         <Link
-          href="https://feedback.tipku.xyz"
+          href="https://feedback.kriptoin.xyz"
           target="_blank"
           className="mb-0 sm:mb-2"
         >
@@ -63,7 +63,7 @@ export default function SideNavItems() {
           </Button>
         </Link>
         <Link
-          href="https://docs.tipku.xyz"
+          href="https://docs.kriptoin.xyz"
           target="_blank"
           className="mb-0 sm:mb-2"
         >

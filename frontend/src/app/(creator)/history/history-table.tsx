@@ -1,21 +1,21 @@
-import { useGetUniversalTipHistory } from "@/hooks/use-get-universal-tip-history";
-import { DataTable } from "./data-table";
-import { columns } from "./columns";
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
+import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
+import { UniversalKriptoinAddress } from "@/constants";
 import { useGetTipHistory } from "@/hooks/use-get-tip-history";
-import { useEffect, useState } from "react";
-import { PaginationState } from "@tanstack/react-table";
-import { useWatchContractEvent } from "wagmi";
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
-import { UniversalTipKuAddress } from "@/constants";
-import { useQueryClient } from "@tanstack/react-query";
-import { TipKuAbi } from "@/abi/TipKu";
-import { getBlockNumber } from "@wagmi/core";
+import { useGetUniversalTipHistory } from "@/hooks/use-get-universal-tip-history";
 import { config } from "@/lib/wagmi";
+import { useQueryClient } from "@tanstack/react-query";
+import { PaginationState } from "@tanstack/react-table";
+import { getBlockNumber } from "@wagmi/core";
+import { useEffect, useState } from "react";
+import { useWatchContractEvent } from "wagmi";
+import { columns } from "./columns";
+import { DataTable } from "./data-table";
 
 interface HistoryTableProps {
   isRegisteredCreator: boolean;
   contractAddress: `0x${string}`;
-  creatorAddress?: `0x${string}`;  
+  creatorAddress?: `0x${string}`;
 }
 
 export const HistoryTable = ({
@@ -60,8 +60,8 @@ export const HistoryTable = ({
   }, []);
 
   useWatchContractEvent({
-    abi: UniversalTipKuAbi,
-    address: UniversalTipKuAddress,
+    abi: UniversalKriptoinAbi,
+    address: UniversalKriptoinAddress,
     eventName: "TipReceived",
     args: {
       recipientAddress: creatorAddress,
@@ -75,7 +75,7 @@ export const HistoryTable = ({
   });
 
   useWatchContractEvent({
-    abi: TipKuAbi,
+    abi: KriptoinAbi,
     address: contractAddress,
     eventName: "TipReceived",
     onLogs: async () => {

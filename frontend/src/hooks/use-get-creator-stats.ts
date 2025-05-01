@@ -6,7 +6,7 @@ interface SuccessReturnType {
 
 import { useReadContracts } from "wagmi";
 import { ErrorReturnType, PendingReturnType } from "./types";
-import { TipKuAbi } from "@/abi/TipKu";
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
 
 type UseGetStatsReturnType =
   | SuccessReturnType
@@ -19,12 +19,12 @@ export const useGetCreatorStats = (
   const result = useReadContracts({
     contracts: [
       {
-        abi: TipKuAbi,
+        abi: KriptoinAbi,
         address: contractAddress,
         functionName: "getTipCount",
       },
       {
-        abi: TipKuAbi,
+        abi: KriptoinAbi,
         address: contractAddress,
         functionName: "totalTipsReceived",
       },

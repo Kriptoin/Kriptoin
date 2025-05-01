@@ -1,6 +1,6 @@
 import { ErrorReturnType, PendingReturnType } from "./types";
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
 import { useReadContract } from "wagmi";
-import { TipKuAbi } from "@/abi/TipKu";
 import { formatEther } from "viem";
 
 type Tips = readonly {
@@ -34,7 +34,7 @@ export const useGetTipHistory = ({
   pageSize,
 }: UseGetTipHistoryProps): UseGetTipHistoryReturnType => {
   const result = useReadContract({
-    abi: TipKuAbi,
+    abi: KriptoinAbi,
     address: contractAddress,
     functionName: "getTipHistory",
     args: [BigInt(pageIndex), BigInt(pageSize)],

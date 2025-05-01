@@ -1,3 +1,4 @@
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
 import {
   Card,
   CardContent,
@@ -14,14 +15,13 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { BaseError, useWriteContract } from "wagmi";
 import { TxButton } from "../../_components/tx-button";
-import { TipKuAbi } from "@/abi/TipKu";
 
 export default function Bio({
   bio,
   contractAddress,
 }: {
   bio: string;
-  contractAddress: string | undefined;
+  contractAddress: `0x${string}` | undefined;
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,7 +41,7 @@ export default function Bio({
 
     writeContract(
       {
-        abi: TipKuAbi,
+        abi: KriptoinAbi,
         address: contractAddress,
         functionName: "setBio",
         args: [value],
@@ -75,8 +75,7 @@ export default function Bio({
       <CardHeader>
         <CardTitle>Set bio</CardTitle>
         <CardDescription>
-          Set your bio to be displayed on the tip page. This action requires a
-          small transaction fee (~0.0001 EDU).
+          Set your bio to be displayed on the tip page.
         </CardDescription>
       </CardHeader>
       <CardContent>

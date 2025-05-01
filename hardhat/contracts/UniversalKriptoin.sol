@@ -5,11 +5,11 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "./libraries/StringUtils.sol";
-import "./TipKu.sol";
-import "./interfaces/ITipKu.sol";
-import "./libraries/TipKuLib.sol";
+import "./Kriptoin.sol";
+import "./interfaces/IKriptoin.sol";
+import "./libraries/KriptoinLib.sol";
 
-contract UniversalTipKu is Ownable, ITipKu {
+contract UniversalKriptoin is Ownable, IKriptoin {
     using StringUtils for string;
 
     struct CreatorInfo {
@@ -62,12 +62,15 @@ contract UniversalTipKu is Ownable, ITipKu {
     /// @dev Function to set the fee percentage
     /// @param _feePercentage - The fee percentage to set
     function setFeePercentage(uint8 _feePercentage) external onlyOwner {
-        require(_feePercentage <= 5, "Fee percentage must be less than or equal to 5");
+        require(
+            _feePercentage <= 5,
+            "Fee percentage must be less than or equal to 5"
+        );
 
         feePercentage = _feePercentage;
     }
 
-    /// @dev Function to deploy a new TipKu contract
+    /// @dev Function to deploy a new Kriptoin contract
     /// @param username - The username of the creator
     function deployContract(
         string calldata username
@@ -76,35 +79,43 @@ contract UniversalTipKu is Ownable, ITipKu {
             bytes(username).length >= 3 && bytes(username).length <= 10,
             "Username must be between 3 and 10 characters"
         );
+        
         require(username.isAlphanumeric(), "Username must be alphanumeric");
+        
         require(
             creatorInfoByAddress[msg.sender].contractAddress == address(0),
             "Contract already deployed"
         );
+        
         require(
             usernameToAddress[username] == address(0),
             "Username already registered"
         );
-        TipKu tipKu = new TipKu(
+        
+        Kriptoin kriptoin = new Kriptoin(
             address(this),
             totalTipsReceived[msg.sender],
-            tips[msg.sender],
             minimumTipAmount
         );
-        tipKu.transferOwnership(msg.sender);
+        
+        kriptoin.transferOwnership(msg.sender);
+        
         CreatorInfo memory creatorInfo = CreatorInfo({
             username: username,
             name: username,
             creatorAddress: msg.sender,
-            contractAddress: address(tipKu)
+            contractAddress: address(kriptoin)
         });
+        
         creatorInfoByAddress[msg.sender] = creatorInfo;
         creatorInfoByUsername[username] = creatorInfo;
         usernameToAddress[username] = msg.sender;
         addressToUsername[msg.sender] = username;
         isRegistered[msg.sender] = true;
-        emit ContractDeployed(msg.sender, address(tipKu));
-        return address(tipKu);
+        
+        emit ContractDeployed(msg.sender, address(kriptoin));
+        
+        return address(kriptoin);
     }
 
     /// @dev Function to send a tip to an unregistered creator
@@ -182,11 +193,7 @@ contract UniversalTipKu is Ownable, ITipKu {
 
         require(balance > 0, "No fees to withdraw");
 
-        bool sent = IERC20(token).transferFrom(
-            address(this),
-            owner(),
-            balance
-        );
+        bool sent = IERC20(token).transferFrom(address(this), owner(), balance);
 
         require(sent, "Failed to send fees");
     }
@@ -230,7 +237,7 @@ contract UniversalTipKu is Ownable, ITipKu {
     ) external view returns (Tip[] memory paginatedTips, uint256 totalTips) {
         totalTips = tips[creatorAddress].length;
 
-        paginatedTips = TipKuLib.getTipHistory(
+        paginatedTips = KriptoinLib.getTipHistory(
             tips[creatorAddress],
             totalTips,
             pageIndex,

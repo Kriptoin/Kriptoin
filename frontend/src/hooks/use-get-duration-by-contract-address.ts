@@ -1,4 +1,4 @@
-import { TipKuAbi } from "@/abi/TipKu";
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
 import { useReadContract } from "wagmi";
 import { UseGetDurationReturnType } from "./use-get-duration";
 
@@ -8,7 +8,7 @@ export const useGetDurationByContractAddress = ({
   contractAddress: `0x${string}` | undefined;
 }): UseGetDurationReturnType => {
   const result = useReadContract({
-    abi: TipKuAbi,
+    abi: KriptoinAbi,
     address: contractAddress,
     functionName: "messageDuration",
     query: {

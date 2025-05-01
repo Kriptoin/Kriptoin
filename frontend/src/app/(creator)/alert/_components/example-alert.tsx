@@ -18,7 +18,7 @@ export const ExampleAlert = ({ colors }: ExampleAlertProps) => {
       <CardHeader>
         <CardTitle className="font-normal">
           <span className="font-medium" style={{ color: colors.secondary }}>
-            TipKu{" "}
+            Kriptoin{" "}
           </span>
           <span style={{ color: colors.primary }}>tipped </span>
           <span className="font-medium" style={{ color: colors.secondary }}>

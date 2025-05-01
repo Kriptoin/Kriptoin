@@ -1,6 +1,6 @@
 "use client";
 
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
+import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
-import { UniversalTipKuAddress } from "@/constants";
+import { UniversalKriptoinAddress } from "@/constants";
 import { useIsRegisteredByAddress } from "@/hooks/use-is-registered-by-address";
 import { config } from "@/lib/wagmi";
 import { useQueryClient } from "@tanstack/react-query";
@@ -45,8 +45,8 @@ export default function Register() {
 
     writeContract(
       {
-        abi: UniversalTipKuAbi,
-        address: UniversalTipKuAddress,
+        abi: UniversalKriptoinAbi,
+        address: UniversalKriptoinAddress,
         functionName: "deployContract",
         args: [username],
       },
@@ -82,8 +82,8 @@ export default function Register() {
         <CardTitle>Register</CardTitle>
         <CardDescription>
           <div>
-            Register a username to make your URLs shorter. This action requires
-            a small transaction fee (~0.0001 EDU).
+            Register a username to make your URLs shorter and unlock additional
+            features.
           </div>
           <div>
             Username must be between 3 and 10 characters long. Username can only

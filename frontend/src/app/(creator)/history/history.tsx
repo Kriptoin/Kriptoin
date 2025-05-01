@@ -7,7 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { UniversalTipKuAddress } from "@/constants";
+import Loading from "@/components/ui/loading";
+import { UniversalKriptoinAddress } from "@/constants";
 import { useGetCreatorInfoByAddress } from "@/hooks/use-get-creator-info-by-address";
 import { useIsRegisteredByAddress } from "@/hooks/use-is-registered-by-address";
 import { useAccount } from "wagmi";
@@ -23,7 +24,7 @@ export default function History() {
   const contractAddress =
     creatorInfoResult.status === "success"
       ? creatorInfoResult.contractAddress
-      : UniversalTipKuAddress;
+      : UniversalKriptoinAddress;
 
   const creatorAddress = accountResult.address;
 
@@ -51,6 +52,8 @@ export default function History() {
                 isRegisteredCreator={isRegisteredCreator}
               />
             )}
+          {(isRegisteredResult.status === "pending" ||
+            creatorInfoResult.status === "pending") && <Loading />}
         </CardContent>
       </Card>
     </div>

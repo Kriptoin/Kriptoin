@@ -1,5 +1,6 @@
 "use client";
 
+import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -7,19 +8,18 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { UniversalKriptoinAddress } from "@/constants";
 import { Menu } from "lucide-react";
 import Image from "next/image";
 import { useAccount, useReadContract } from "wagmi";
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
-import { UniversalTipKuAddress } from "@/constants";
 import SideNavItems from "./side-nav-items";
 
 export const MobileSideNav = () => {
   const { isConnected, address } = useAccount();
 
   const result = useReadContract({
-    abi: UniversalTipKuAbi,
-    address: UniversalTipKuAddress,
+    abi: UniversalKriptoinAbi,
+    address: UniversalKriptoinAddress,
     functionName: "creatorInfoByAddress",
     args: [address ?? "0x0"],
   });

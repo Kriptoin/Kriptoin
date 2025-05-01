@@ -1,4 +1,4 @@
-import { TipKuAbi } from "@/abi/TipKu";
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
 import {
   Card,
   CardDescription,
@@ -6,17 +6,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { UseGetCreatorInfoReturnType } from "@/hooks/use-get-creator-info-by-address";
+import { UseGetCreatorInfoReturnType } from "@/hooks/use-get-creator-info";
 import { useTxHash } from "@/hooks/use-tx-hash";
 import { config } from "@/lib/wagmi";
 import { waitForTransactionReceipt } from "@wagmi/core";
-import { NotebookPen, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { BaseError, useWriteContract } from "wagmi";
 import { TxButton } from "../../_components/tx-button";
-import { RegisterCard } from "./register-card";
 import { LoadingCard } from "./loading-card";
+import { RegisterCard } from "./register-card";
 
 export const TestTip = ({
   creatorInfo,
@@ -40,7 +40,7 @@ export const TestTip = ({
 
     writeContract(
       {
-        abi: TipKuAbi,
+        abi: KriptoinAbi,
         address: creatorInfo.contractAddress,
         functionName: "sendTestTip",
       },
@@ -57,14 +57,14 @@ export const TestTip = ({
         onError: (error) => {
           toast.error(
             (error as BaseError).details ||
-              "Failed to send test tip. See console for detailed error.",
+              "Failed to send test tip. See console for detailed error."
           );
 
           console.error(error.message);
 
           setIsLoading(false);
         },
-      },
+      }
     );
   };
 

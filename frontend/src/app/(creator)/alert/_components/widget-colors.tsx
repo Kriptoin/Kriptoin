@@ -1,3 +1,4 @@
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
 import {
   Card,
   CardContent,
@@ -5,22 +6,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ColorPicker } from "./color-picker";
 import { useColor } from "@/hooks/use-color";
-import { useWriteContract } from "wagmi";
-import { useMemo, useState } from "react";
-import { waitForTransactionReceipt } from "@wagmi/core";
-import { config } from "@/lib/wagmi";
-import toast from "react-hot-toast";
-import { ExampleAlert } from "./example-alert";
-import { Save } from "lucide-react";
-import { useTxHash } from "@/hooks/use-tx-hash";
-import { TxButton } from "../../_components/tx-button";
-import { BaseError } from "wagmi";
-import { TipKuAbi } from "@/abi/TipKu";
 import { UseGetColorsReturnType } from "@/hooks/use-get-colors";
-import { ErrorCard } from "./error-card";
 import { useGetCreatorInfo } from "@/hooks/use-get-creator-info";
+import { useTxHash } from "@/hooks/use-tx-hash";
+import { config } from "@/lib/wagmi";
+import { waitForTransactionReceipt } from "@wagmi/core";
+import { Save } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { BaseError, useWriteContract } from "wagmi";
+import { TxButton } from "../../_components/tx-button";
+import { ColorPicker } from "./color-picker";
+import { ErrorCard } from "./error-card";
+import { ExampleAlert } from "./example-alert";
 import { LoadingCard } from "./loading-card";
 import { RegisterCard } from "./register-card";
 
@@ -51,7 +50,7 @@ export const WidgetColors = ({
 
     writeContract(
       {
-        abi: TipKuAbi,
+        abi: KriptoinAbi,
         address: contractAddress,
         functionName: "setColors",
         args: [primaryColor, secondaryColor, backgroundColor],
@@ -71,14 +70,14 @@ export const WidgetColors = ({
         onError: (error) => {
           toast.error(
             (error as BaseError).details ||
-              "Failed to save colors. See console for detailed error.",
+              "Failed to save colors. See console for detailed error."
           );
 
           console.error(error);
 
           setIsLoading(false);
         },
-      },
+      }
     );
   };
 

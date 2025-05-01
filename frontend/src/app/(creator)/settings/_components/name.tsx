@@ -1,5 +1,6 @@
 "use client";
 
+import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
 import {
   Card,
   CardContent,
@@ -8,17 +9,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { useWriteContract } from "wagmi";
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
-import { UniversalTipKuAddress } from "@/constants";
-import { waitForTransactionReceipt } from "@wagmi/core";
-import { config } from "@/lib/wagmi";
-import toast from "react-hot-toast";
-import { Save } from "lucide-react";
+import { UniversalKriptoinAddress } from "@/constants";
 import { useTxHash } from "@/hooks/use-tx-hash";
+import { config } from "@/lib/wagmi";
+import { waitForTransactionReceipt } from "@wagmi/core";
+import { Save } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { BaseError, useWriteContract } from "wagmi";
 import { TxButton } from "../../_components/tx-button";
-import { BaseError } from "wagmi";
 
 export default function Name({ currentName }: { currentName?: string }) {
   const [name, setName] = useState(currentName ?? "");
@@ -35,8 +34,8 @@ export default function Name({ currentName }: { currentName?: string }) {
 
     writeContract(
       {
-        abi: UniversalTipKuAbi,
-        address: UniversalTipKuAddress,
+        abi: UniversalKriptoinAbi,
+        address: UniversalKriptoinAddress,
         functionName: "changeName",
         args: [name],
       },
@@ -74,8 +73,7 @@ export default function Name({ currentName }: { currentName?: string }) {
         <CardTitle>Update name</CardTitle>
         <CardDescription>
           <div>
-            Update your current name. This action requires a small transaction
-            fee (~0.0001 EDU).
+            Update your current name.
           </div>
           <div>
             Name must be between 3 and 35 characters long. Name can only contain

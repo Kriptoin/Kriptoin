@@ -1,4 +1,4 @@
-export const UniversalTipKuAbi = [
+export const UniversalKriptoinAbi = [
   {
     inputs: [
       {
@@ -86,6 +86,12 @@ export const UniversalTipKuAbi = [
         type: "address",
       },
       {
+        indexed: true,
+        internalType: "bool",
+        name: "fakeTip",
+        type: "bool",
+      },
+      {
         indexed: false,
         internalType: "string",
         name: "senderName",
@@ -105,31 +111,18 @@ export const UniversalTipKuAbi = [
       },
       {
         indexed: false,
+        internalType: "uint8",
+        name: "feePercentage",
+        type: "uint8",
+      },
+      {
+        indexed: false,
         internalType: "uint256",
         name: "timestamp",
         type: "uint256",
       },
     ],
     name: "TipReceived",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "Withdraw",
     type: "event",
   },
   {
@@ -293,6 +286,19 @@ export const UniversalTipKuAbi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "feePercentage",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -359,12 +365,17 @@ export const UniversalTipKuAbi = [
             type: "uint256",
           },
           {
+            internalType: "uint8",
+            name: "feePercentage",
+            type: "uint8",
+          },
+          {
             internalType: "uint256",
             name: "timestamp",
             type: "uint256",
           },
         ],
-        internalType: "struct ITipKu.Tip[]",
+        internalType: "struct IKriptoin.Tip[]",
         name: "paginatedTips",
         type: "tuple[]",
       },
@@ -460,6 +471,19 @@ export const UniversalTipKuAbi = [
   {
     inputs: [
       {
+        internalType: "uint8",
+        name: "_feePercentage",
+        type: "uint8",
+      },
+    ],
+    name: "setFeePercentage",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "_amount",
         type: "uint256",
@@ -545,6 +569,13 @@ export const UniversalTipKuAbi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "withdrawFees",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ] as const;

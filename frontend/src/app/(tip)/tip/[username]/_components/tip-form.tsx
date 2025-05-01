@@ -1,5 +1,5 @@
-import { TipKuAbi } from "@/abi/TipKu";
-import { UniversalTipKuAbi } from "@/abi/UniversalTipKu";
+import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
+import { KriptoinAbi } from "@/abi/KriptoinAbi";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { IDRXTokenAddress, UniversalTipKuAddress } from "@/constants";
+import { IDRXTokenAddress, UniversalKriptoinAddress } from "@/constants";
 import { formSchema } from "@/lib/schemas";
 import { TipFormData } from "@/lib/types";
 import { config } from "@/lib/wagmi";
@@ -69,8 +69,8 @@ export default function TipForm({
 
     writeContract(
       {
-        abi: UniversalTipKuAbi,
-        address: UniversalTipKuAddress,
+        abi: UniversalKriptoinAbi,
+        address: UniversalKriptoinAddress,
         functionName: "sendTip",
         args: [
           creatorAddress,
@@ -131,7 +131,7 @@ export default function TipForm({
         onSuccess: () => {
           writeContract(
             {
-              abi: TipKuAbi,
+              abi: KriptoinAbi,
               address: contractAddress,
               functionName: "sendTip",
               args: [

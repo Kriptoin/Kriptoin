@@ -3,10 +3,12 @@
 
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
-const UniversalTipKuModule = buildModule("UniversalTipKuModule", (m) => {
-  const contract = m.contract("UniversalTipKu", ["0x3C361ccb8ED62468717EE7dF522d2d9Bc48a2A06"]);
+const UniversalKriptoinModule = buildModule("UniversalKriptoinModule", (m) => {
+  const contract = m.contract("UniversalKriptoin", [
+    "0xE66b474FDd3958bF7E25Fd189a62f911C6fCf384",
+  ]);
 
   return { contract };
 });
 
-export default UniversalTipKuModule;
+export default UniversalKriptoinModule;

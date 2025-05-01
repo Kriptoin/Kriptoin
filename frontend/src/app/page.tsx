@@ -23,13 +23,13 @@ const opportunities = [
   {
     title: "Seamless Integration for Streamers",
     description:
-      "Streamers can easily integrate TipKu into their existing setup. The platform is designed to be simple for streamers.",
+      "Streamers can easily integrate Kriptoin into their existing setup. The platform is designed to be simple for streamers.",
     icon: <Video className="text-main size-6" />,
   },
   {
     title: "Low Platform Fees",
     description:
-      "Streamers retain 95-99% of their earnings. TipKu is designed to be a low-fee tipping platform for streamers.",
+      "Streamers retain 95-99% of their earnings. Kriptoin is designed to be a low-fee tipping platform for streamers.",
     icon: <BadgePercent className="text-main size-6" />,
   },
   {
@@ -51,7 +51,7 @@ export default function Page() {
       <main className="flex flex-col items-center">
         <div className="w-full sticky top-0 bg-white/70 backdrop-blur-md border-b border-gray-200/30 z-10 shadow-sm">
           <header className="flex justify-between items-center py-4 px-12">
-            <img src="/logo.png" alt="TipKu" className="w-24" />
+            <img src="/logo.png" alt="Kriptoin" className="w-24" />
             <div className="flex gap-4">
               <Link href="/dashboard">
                 <Button className="flex gap-2 text-base">
@@ -66,7 +66,7 @@ export default function Page() {
         <div className="flex flex-col gap-6 items-center pb-36 px-6 text-center w-full">
           <h1 className="text-5xl sm:text-7xl font-bold lg:line-clamp-2 leading-tight mt-24 w-full sm:max-w-5xl">
             <span>Unlock Web3 Monetization with </span>
-            <span className="text-main">TipKu</span>
+            <span className="text-main">Kriptoin</span>
           </h1>
           <p className="max-w-xl leading-loose">
             A decentralized tipping platform for streamers that offers instant
@@ -100,7 +100,7 @@ export default function Page() {
 
           <div className="w-full max-w-7xl flex flex-col gap-4">
             <h2 className="text-3xl font-bold text-center mb-4">
-              Why Choose <span className="text-main">TipKu</span>?
+              Why Choose <span className="text-main">Kriptoin</span>?
             </h2>
             <div className="flex flex-col md:flex-row gap-6">
               {opportunities.map((opportunity, index) => {
@@ -123,7 +123,7 @@ export default function Page() {
         <div className="w-full flex flex-col gap-6 items-center justify-center px-6">
           <div className="w-full max-w-7xl py-12 flex flex-col gap-4">
             <h2 className="text-3xl font-bold text-center">
-              How <span className="text-main">TipKu</span> Works?
+              How <span className="text-main">Kriptoin</span> Works?
             </h2>
             <h3 className="text-xl font-bold text-center mb-4">
               It's super easy to get started. No complex setup or config, no
@@ -165,7 +165,7 @@ export default function Page() {
                     2. Integrate into streaming software
                   </div>
                   <div className="text-justify">
-                    Integrate TipKu with your preferred streaming software such
+                    Integrate Kriptoin with your preferred streaming software such
                     as OBS Studio, Streamlabs Desktop, and more.
                   </div>
                 </CardFooter>
@@ -203,33 +203,33 @@ export default function Page() {
             <Accordion type="single" collapsible>
               <AccordionItem value="faq-1">
                 <AccordionTrigger className="bg-white">
-                  What is TipKu?
+                  What is Kriptoin?
                 </AccordionTrigger>
                 <AccordionContent>
-                  TipKu is a decentralized platform that enables educators and
+                  Kriptoin is a decentralized platform that enables educators and
                   content creators to monetize their educational content
                   directly from their live streams. It offers a web3-first
                   approach, low platform fees, instant withdrawals, and a simple
-                  integration process. TipKu ensures that your support goes
+                  integration process. Kriptoin ensures that your support goes
                   directly to content creators with minimal platform fees.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="faq-2">
                 <AccordionTrigger className="bg-white">
-                  Can I stream in TipKu?
+                  Can I stream in Kriptoin?
                 </AccordionTrigger>
                 <AccordionContent>
-                  No, TipKu is a decentralized tipping platform for streamers.
+                  No, Kriptoin is a decentralized tipping platform for streamers.
                   It enhances streams with an easy-to-use tip alert that appears
                   on screen whenever a tip is received.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="faq-3">
                 <AccordionTrigger className="bg-white">
-                  Is TipKu available to all types of streamers?
+                  Is Kriptoin available to all types of streamers?
                 </AccordionTrigger>
                 <AccordionContent>
-                  Yes, due to the permissionless nature of blockchain, TipKu is
+                  Yes, due to the permissionless nature of blockchain, Kriptoin is
                   accessible to all types of streamers, including educators,
                   artists, gamers, and more. It provides a fair and transparent
                   platform for creators to monetize their content and engage
@@ -238,11 +238,11 @@ export default function Page() {
               </AccordionItem>
               <AccordionItem value="faq-4">
                 <AccordionTrigger className="bg-white">
-                  Which streaming software is supported by TipKu?
+                  Which streaming software is supported by Kriptoin?
                 </AccordionTrigger>
                 <AccordionContent>
-                  TipKu supports popular streaming software such as OBS Studio,
-                  Streamlabs Desktop, and others. You can easily integrate TipKu
+                  Kriptoin supports popular streaming software such as OBS Studio,
+                  Streamlabs Desktop, and others. You can easily integrate Kriptoin
                   into your existing streaming setup to start earning from your
                   live streams.
                 </AccordionContent>
@@ -257,7 +257,7 @@ export default function Page() {
               Ready to Monetize Your Stream?
             </h2>
             <p className="text-white text-lg mb-8 max-w-2xl mx-auto">
-              Join TipKu today and start receiving tips directly from your
+              Join Kriptoin today and start receiving tips directly from your
               viewers. No complicated setup, just seamless integration with your
               existing streaming setup.
             </p>
@@ -273,24 +273,24 @@ export default function Page() {
       <footer className="pt-12 pb-8 px-4 bg-black border-t border-gray-800">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="flex flex-col gap-4 justify-between">
-            <img src="/logo-white.png" alt="TipKu" className="w-32" />
+            <img src="/logo-white.png" alt="Kriptoin" className="w-32" />
             <div className="flex gap-4">
               <Link
-                href="https://github.com/TipKu/TipKu"
+                href="https://github.com/Kriptoin/Kriptoin"
                 className="text-gray-300 hover:text-main"
                 target="_blank"
               >
                 <GitHubIcon />
               </Link>
               <Link
-                href="https://x.com/TipKu"
+                href="https://x.com/Kriptoin"
                 className="text-gray-300 hover:text-main"
                 target="_blank"
               >
                 <XIcon />
               </Link>
               <Link
-                href="https://t.me/TipKu"
+                href="https://t.me/Kriptoin"
                 className="text-gray-300 hover:text-main"
                 target="_blank"
               >
@@ -316,14 +316,14 @@ export default function Page() {
               Dashboard
             </Link>
             <Link
-              href="https://feedback.tipku.xyz"
+              href="https://feedback.kriptoin.xyz"
               className="text-gray-300 hover:text-main"
               target="_blank"
             >
               Feedback
             </Link>
             <Link
-              href="https://docs.tipku.xyz"
+              href="https://docs.kriptoin.xyz"
               className="text-gray-300 hover:text-main"
               target="_blank"
             >
@@ -334,14 +334,14 @@ export default function Page() {
           <div className="flex flex-col gap-2">
             <h3 className="font-bold text-lg mb-2 text-white">Legal</h3>
             <Link
-              href="https://docs.tipku.xyz/terms-of-service"
+              href="https://docs.kriptoin.xyz/terms-of-service"
               className="text-gray-300 hover:text-main"
               target="_blank"
             >
               Terms of Service
             </Link>
             <Link
-              href="https://docs.tipku.xyz/privacy-policy"
+              href="https://docs.kriptoin.xyz/privacy-policy"
               className="text-gray-300 hover:text-main"
               target="_blank"
             >
@@ -352,14 +352,14 @@ export default function Page() {
           <div className="flex flex-col gap-2">
             <h3 className="font-bold text-lg mb-2 text-white">Community</h3>
             <Link
-              href="https://x.com/TipKu"
+              href="https://x.com/Kriptoin"
               className="text-gray-300 hover:text-main"
               target="_blank"
             >
               X
             </Link>
             <Link
-              href="https://t.me/TipKu"
+              href="https://t.me/Kriptoin"
               className="text-gray-300 hover:text-main"
               target="_blank"
             >
@@ -376,7 +376,7 @@ export default function Page() {
         </div>
 
         <div className="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
-          © {new Date().getFullYear()} TipKu. All rights reserved.
+          © {new Date().getFullYear()} Kriptoin. All rights reserved.
         </div>
       </footer>
     </div>

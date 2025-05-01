@@ -17,7 +17,7 @@ export const AlertUrl = ({
   fullUrl: string;
   username?: string;
 }) => {
-  const obsUrl = `${fullUrl}?layer-name=TipKu Alert&layer-width=600&layer-height=200`;
+  const obsUrl = `${fullUrl}?layer-name=Kriptoin Alert&layer-width=600&layer-height=200`;
 
   const handleDragStart = (e: React.DragEvent<HTMLAnchorElement>) => {
     const exampleAlert = document.getElementById("example-alert");
@@ -27,8 +27,8 @@ export const AlertUrl = ({
     } else {
       const img = document.createElement("img");
       img.setAttribute("src", "/logo.png");
-      img.setAttribute("alt", "TipKu");
-      img.id = "tipku-logo";
+      img.setAttribute("alt", "Kriptoin");
+      img.id = "kriptoin-logo";
       img.hidden = true;
       document.body.appendChild(img);
       e.dataTransfer.setDragImage(img, 0, 0);
@@ -38,7 +38,7 @@ export const AlertUrl = ({
   };
 
   const handleDragEnd = () => {
-    const img = document.getElementById("tipku-logo");
+    const img = document.getElementById("kriptoin-logo");
 
     if (img) {
       document.body.removeChild(img);
@@ -54,7 +54,7 @@ export const AlertUrl = ({
       onDragEndCapture={handleDragEnd}
       draggable
     >
-      <Card className="w-full flex flex-col">
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Alert URL</CardTitle>
           <CardDescription>

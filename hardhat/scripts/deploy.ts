@@ -12,7 +12,7 @@ async function main() {
     chain: bscTestnet,
   });
 
-  const { bytecode } = hre.artifacts.readArtifactSync("UniversalTipKu");
+  const { bytecode } = hre.artifacts.readArtifactSync("UniversalKriptoin");
 
   const hash = await walletClient.sendTransaction({
     data: bytecode as `0x${string}`,
@@ -29,7 +29,7 @@ async function main() {
 
   await hre.run("verify:verify", {
     address: receipt.contractAddress!,
-    contract: "contracts/UniversalTipKu.sol:UniversalTipKu",
+    contract: "contracts/UniversalKriptoin.sol:UniversalKriptoin",
     constructorArguments: [],
   });
 }
