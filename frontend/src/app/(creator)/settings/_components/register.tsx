@@ -23,7 +23,7 @@ import { BaseError, useAccount, useWriteContract } from "wagmi";
 
 export default function Register() {
   const account = useAccount();
-  const isRegisteredResult = useIsRegisteredByAddress(account.address);
+  const isRegistered = useIsRegisteredByAddress(account.address);
 
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -32,11 +32,11 @@ export default function Register() {
 
   const queryClient = useQueryClient();
 
-  if (isRegisteredResult.status === "success" && isRegisteredResult.data) {
+  if (isRegistered.status === "success" && isRegistered.data) {
     return null;
   }
 
-  if (isRegisteredResult.status === "pending") return <Loading />;
+  if (isRegistered.status === "pending") return <Loading />;
 
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -86,7 +86,7 @@ export default function Register() {
             features.
           </div>
           <div>
-            Username must be between 3 and 10 characters long. Username can only
+            Username must be between 2 and 15 characters long. Username can only
             contain letters and numbers.
           </div>
         </CardDescription>
@@ -96,8 +96,8 @@ export default function Register() {
           <Input
             placeholder="Username"
             required
-            minLength={3}
-            maxLength={10}
+            minLength={2}
+            maxLength={15}
             pattern="^[a-zA-Z0-9]+$"
             autoComplete="off"
             onChange={(e) => setUsername(e.target.value)}

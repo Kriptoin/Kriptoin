@@ -19,12 +19,13 @@ import { TipFormData } from "@/lib/types";
 import { config } from "@/lib/wagmi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { waitForTransactionReceipt } from "@wagmi/core";
-import { Ham, Loader2, Send } from "lucide-react";
+import { Loader2, Send, TextSearch } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { formatEther, parseEther } from "viem";
+import { erc20Abi, formatUnits, parseUnits } from "viem";
 import { BaseError, useAccount, useBalance, useWriteContract } from "wagmi";
+import { checkMessage } from "@/lib/actions";
 
 const AMOUNTS = [5000, 10000, 25000, 50000];
 
@@ -49,7 +50,7 @@ export default function TipForm({
 
   const { isConnected, address: senderAddress } = useAccount();
 
-  const balanceResult = useBalance({
+  const balance = useBalance({
     address: senderAddress,
     token: IDRXTokenAddress,
     query: { enabled: !!senderAddress },
@@ -59,7 +60,10 @@ export default function TipForm({
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSendToUnregisteredCreator = (formData: TipFormData) => {
+  const handleSendToUnregisteredCreator = (
+    formData: TipFormData,
+    approval: { signature: `0x${string}`; expiry: number },
+  ) => {
     if (!creatorAddress) {
       toast.error("Send tip failed. Recipient address not found.");
       return;
@@ -69,28 +73,57 @@ export default function TipForm({
 
     writeContract(
       {
-        abi: UniversalKriptoinAbi,
-        address: UniversalKriptoinAddress,
-        functionName: "sendTip",
+        abi: erc20Abi,
+        address: IDRXTokenAddress,
+        functionName: "approve",
         args: [
-          creatorAddress,
-          formData.anonymous ? "Anonymous" : formData.name,
-          formData.message,
-          parseEther(formData.amount.toString()),
+          UniversalKriptoinAddress,
+          parseUnits(formData.amount.toString(), 2),
         ],
       },
       {
         onSuccess: async (data) => {
           await waitForTransactionReceipt(config, { hash: data });
 
-          toast.success("Tip sent successfully.");
+          writeContract(
+            {
+              abi: UniversalKriptoinAbi,
+              address: UniversalKriptoinAddress,
+              functionName: "sendTip",
+              args: [
+                creatorAddress,
+                formData.anonymous ? "Anonymous" : formData.name,
+                formData.message,
+                parseUnits(formData.amount.toString(), 2),
+                BigInt(approval.expiry),
+                approval.signature,
+              ],
+            },
+            {
+              onSuccess: async (data) => {
+                await waitForTransactionReceipt(config, { hash: data });
 
-          setIsLoading(false);
+                toast.success("Tip sent successfully.");
+
+                setIsLoading(false);
+              },
+              onError: (error) => {
+                toast.error(
+                  (error as BaseError).details ||
+                    "Send tip failed. See console for detailed error.",
+                );
+
+                console.error(error.message);
+
+                setIsLoading(false);
+              },
+            },
+          );
         },
         onError: (error) => {
           toast.error(
             (error as BaseError).details ||
-              "Send tip failed. See console for detailed error.",
+              "Approve failed. See console for detailed error.",
           );
 
           console.error(error.message);
@@ -101,7 +134,10 @@ export default function TipForm({
     );
   };
 
-  const handleSendToRegisteredCreator = (formData: TipFormData) => {
+  const handleSendToRegisteredCreator = (
+    formData: TipFormData,
+    approval: { signature: `0x${string}`; expiry: number },
+  ) => {
     if (!contractAddress) {
       toast.error("Send tip failed. Contract address not found.");
       return;
@@ -111,24 +147,15 @@ export default function TipForm({
 
     writeContract(
       {
-        abi: [
-          {
-            inputs: [
-              { internalType: "address", name: "spender", type: "address" },
-              { internalType: "uint256", name: "amount", type: "uint256" },
-            ],
-            name: "approve",
-            outputs: [{ internalType: "bool", name: "", type: "bool" }],
-            stateMutability: "nonpayable",
-            type: "function",
-          },
-        ],
+        abi: erc20Abi,
         address: IDRXTokenAddress,
         functionName: "approve",
-        args: [contractAddress, parseEther(formData.amount.toString())],
+        args: [contractAddress, parseUnits(formData.amount.toString(), 2)],
       },
       {
-        onSuccess: () => {
+        onSuccess: async (data) => {
+          await waitForTransactionReceipt(config, { hash: data });
+
           writeContract(
             {
               abi: KriptoinAbi,
@@ -137,7 +164,9 @@ export default function TipForm({
               args: [
                 formData.anonymous ? "Anonymous" : formData.name,
                 formData.message,
-                parseEther(formData.amount.toString()),
+                parseUnits(formData.amount.toString(), 2),
+                BigInt(approval.expiry),
+                approval.signature,
               ],
             },
             {
@@ -192,11 +221,23 @@ export default function TipForm({
         return;
       }
 
-      if (isToAddress) {
-        return handleSendToUnregisteredCreator(formData);
+      const message = form.watch("message");
+
+      const result = await checkMessage({
+        baseUrl: window.location.origin,
+        message,
+      });
+
+      if ("error" in result) {
+        toast.error(result.error);
+        return;
       }
 
-      handleSendToRegisteredCreator(formData);
+      if (isToAddress) {
+        return handleSendToUnregisteredCreator(formData, result);
+      }
+
+      handleSendToRegisteredCreator(formData, result);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Send tip failed.");
     }
@@ -260,11 +301,11 @@ export default function TipForm({
                   <Label htmlFor="amount" className="text-sm">
                     Amount (IDRX)
                   </Label>
-                  {balanceResult.isSuccess && (
+                  {balance.isSuccess && (
                     <p className="text-xs text-gray-500">
                       Balance:{" "}
-                      {Number(formatEther(balanceResult.data.value)).toFixed(5)}{" "}
-                      {balanceResult.data.symbol}
+                      {Number(formatUnits(balance.data.value, 2)).toFixed(2)}{" "}
+                      {balance.data.symbol}
                     </p>
                   )}
                 </div>
@@ -304,9 +345,14 @@ export default function TipForm({
             name="message"
             render={({ field }) => (
               <FormItem>
-                <Label htmlFor="message" className="text-sm">
-                  Message
-                </Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="message" className="text-sm">
+                    Message
+                  </Label>
+                  <p className="text-xs text-gray-500 ml-auto">
+                    {field.value.length} / 250
+                  </p>
+                </div>
                 <FormControl>
                   <Textarea
                     id="message"
@@ -315,12 +361,7 @@ export default function TipForm({
                     {...field}
                   />
                 </FormControl>
-                <div className="flex justify-between items-center w-full">
-                  <FormMessage />
-                  <p className="text-xs text-gray-500 ml-auto">
-                    {field.value.length} / 250
-                  </p>
-                </div>
+                <FormMessage />
               </FormItem>
             )}
           />

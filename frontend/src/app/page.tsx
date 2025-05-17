@@ -43,9 +43,9 @@ const opportunities = [
 export default function Page() {
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <div className="bg-sky-500 text-white text-center py-1 flex items-center justify-center gap-2">
+      <div className="bg-main text-white text-center py-1 flex items-center justify-center gap-2">
         <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-        <span>Live on EDU Chain Testnet</span>
+        <span>Live on Lisk Mainnet</span>
       </div>
 
       <main className="flex flex-col items-center">
@@ -136,17 +136,15 @@ export default function Page() {
                     src="/login.png"
                     width="400"
                     height="150"
-                    alt="Log in with Google / Email"
+                    alt="Log in with Email"
                     className="h-44 w-full object-cover rounded-xl shadow-md"
                   />
                 </CardHeader>
                 <CardFooter className="flex flex-col gap-2 items-start">
-                  <div className="font-bold text-lg">
-                    1. Log in with Google / Email
-                  </div>
+                  <div className="font-bold text-lg">1. Log in with Email</div>
                   <div className="text-justify">
-                    Streamers can log in with their Google account or email.
-                    External wallets (e.g., MetaMask) are also supported.
+                    Streamers can log in with their email. External wallets
+                    (e.g., MetaMask) are also supported.
                   </div>
                 </CardFooter>
               </Card>
@@ -165,8 +163,8 @@ export default function Page() {
                     2. Integrate into streaming software
                   </div>
                   <div className="text-justify">
-                    Integrate Kriptoin with your preferred streaming software such
-                    as OBS Studio, Streamlabs Desktop, and more.
+                    Integrate Kriptoin with your preferred streaming software
+                    such as OBS Studio, Streamlabs Desktop, and more.
                   </div>
                 </CardFooter>
               </Card>
@@ -206,8 +204,8 @@ export default function Page() {
                   What is Kriptoin?
                 </AccordionTrigger>
                 <AccordionContent>
-                  Kriptoin is a decentralized platform that enables educators and
-                  content creators to monetize their educational content
+                  Kriptoin is a decentralized platform that enables educators
+                  and content creators to monetize their educational content
                   directly from their live streams. It offers a web3-first
                   approach, low platform fees, instant withdrawals, and a simple
                   integration process. Kriptoin ensures that your support goes
@@ -219,39 +217,27 @@ export default function Page() {
                   Can I stream in Kriptoin?
                 </AccordionTrigger>
                 <AccordionContent>
-                  No, Kriptoin is a decentralized tipping platform for streamers.
-                  It enhances streams with an easy-to-use tip alert that appears
-                  on screen whenever a tip is received.
+                  No, Kriptoin is a decentralized tipping platform for
+                  streamers. It enhances streams with an easy-to-use tip alert
+                  that appears on screen whenever a tip is received.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="faq-3">
                 <AccordionTrigger className="bg-white">
-                  Is Kriptoin available to all types of streamers?
-                </AccordionTrigger>
-                <AccordionContent>
-                  Yes, due to the permissionless nature of blockchain, Kriptoin is
-                  accessible to all types of streamers, including educators,
-                  artists, gamers, and more. It provides a fair and transparent
-                  platform for creators to monetize their content and engage
-                  with their audience.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="faq-4">
-                <AccordionTrigger className="bg-white">
                   Which streaming software is supported by Kriptoin?
                 </AccordionTrigger>
                 <AccordionContent>
-                  Kriptoin supports popular streaming software such as OBS Studio,
-                  Streamlabs Desktop, and others. You can easily integrate Kriptoin
-                  into your existing streaming setup to start earning from your
-                  live streams.
+                  Kriptoin supports popular streaming software such as OBS
+                  Studio, Streamlabs Desktop, and others. You can easily
+                  integrate Kriptoin into your existing streaming setup to start
+                  earning from your live streams.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
           </div>
         </div>
 
-        <div className="w-full flex flex-col gap-6 items-center justify-center py-24 px-6 bg-sky-500">
+        <div className="w-full flex flex-col gap-6 items-center justify-center py-24 px-6 bg-main">
           <div className="w-full max-w-7xl text-center">
             <h2 className="text-4xl font-bold mb-6 text-white ">
               Ready to Monetize Your Stream?
@@ -283,21 +269,21 @@ export default function Page() {
                 <GitHubIcon />
               </Link>
               <Link
-                href="https://x.com/Kriptoin"
+                href="https://x.com/kriptoin_xyz"
                 className="text-gray-300 hover:text-main"
                 target="_blank"
               >
                 <XIcon />
               </Link>
               <Link
-                href="https://t.me/Kriptoin"
+                href="https://t.me/kriptoin_xyz"
                 className="text-gray-300 hover:text-main"
                 target="_blank"
               >
                 <TelegramIcon />
               </Link>
               <Link
-                href="https://discord.com/invite/BBteJEg3T8"
+                href="https://discord.gg/M8jf7Ga6rG"
                 className="text-gray-300 hover:text-main"
                 target="_blank"
               >
@@ -315,13 +301,13 @@ export default function Page() {
             >
               Dashboard
             </Link>
-            <Link
+            {/* <Link
               href="https://feedback.kriptoin.xyz"
               className="text-gray-300 hover:text-main"
               target="_blank"
             >
               Feedback
-            </Link>
+            </Link> */}
             <Link
               href="https://docs.kriptoin.xyz"
               className="text-gray-300 hover:text-main"
@@ -352,21 +338,21 @@ export default function Page() {
           <div className="flex flex-col gap-2">
             <h3 className="font-bold text-lg mb-2 text-white">Community</h3>
             <Link
-              href="https://x.com/Kriptoin"
+              href="https://x.com/kriptoin_xyz"
               className="text-gray-300 hover:text-main"
               target="_blank"
             >
               X
             </Link>
             <Link
-              href="https://t.me/Kriptoin"
+              href="https://t.me/kriptoin_xyz"
               className="text-gray-300 hover:text-main"
               target="_blank"
             >
               Telegram
             </Link>
             <Link
-              href="https://discord.com/invite/BBteJEg3T8"
+              href="https://discord.gg/M8jf7Ga6rG"
               className="text-gray-300 hover:text-main"
               target="_blank"
             >

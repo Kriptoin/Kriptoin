@@ -1,6 +1,6 @@
+import { TokenFaucetContractAddress } from "@/constants";
 import { useReadContract } from "wagmi";
 import { ErrorReturnType, PendingReturnType } from "./types";
-import { FaucetContractAddress } from "@/constants";
 
 interface SuccessReturnType {
   status: "success";
@@ -37,7 +37,7 @@ export const useHasClaimed = (
         type: "function",
       },
     ],
-    address: FaucetContractAddress,
+    address: TokenFaucetContractAddress,
     functionName: "hasClaimed",
     args: [address!],
     query: {

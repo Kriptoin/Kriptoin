@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-import "./UniversalKriptoin.sol";
+import "./UniversalKriptoinV1.sol";
 import "./interfaces/IKriptoin.sol";
 import "./libraries/KriptoinLib.sol";
 import "./libraries/StringUtils.sol";
 
-contract Kriptoin is Ownable, IKriptoin {
+contract KriptoinV1 is Ownable, IKriptoin {
     using StringUtils for string;
 
     Tip[] private tips;
@@ -32,11 +32,11 @@ contract Kriptoin is Ownable, IKriptoin {
         factoryAddress = _factoryAddress;
         totalTipsReceived = _totalTipsReceived;
 
-        colors["background"] = "#209bb9";
+        colors["background"] = "#695958";
         colors["primary"] = "#ffffff";
         colors["secondary"] = "#c1fc29";
 
-        messageDuration = 5;
+        messageDuration = 15;
 
         minimumTipAmount = _minimumTipAmount;
         isEnabled = true;
@@ -44,14 +44,14 @@ contract Kriptoin is Ownable, IKriptoin {
 
     /// @dev Function to get the token
     function _getToken() internal view returns (IERC20) {
-        return UniversalKriptoin(factoryAddress).token();
+        return UniversalKriptoinV1(factoryAddress).token();
     }
 
     // @dev Function to set the minimum tip amount
     // @param _amount - The minimum tip amount in wei
     function setMinimumTipAmount(uint256 _amount) external onlyOwner {
         require(
-            _amount < 50000 ether,
+            _amount < 50000 * 100,
             "Minimum tip amount must be less than 50000 IDR"
         );
 
@@ -72,7 +72,7 @@ contract Kriptoin is Ownable, IKriptoin {
             fakeTip: true,
             senderName: "Kriptoin",
             message: "This is a test tip",
-            amount: 10000 ether,
+            amount: 10000 * 100,
             feePercentage: 1,
             timestamp: block.timestamp
         });
@@ -82,10 +82,14 @@ contract Kriptoin is Ownable, IKriptoin {
     /// @param senderName - The name of the sender
     /// @param message - The message sent with the tip
     /// @param amount - The amount of the tip
+    /// @param expiry - The expiry time of the approval
+    /// @param signature - The signature of the approval
     function sendTip(
         string calldata senderName,
         string calldata message,
-        uint256 amount
+        uint256 amount,
+        uint256 expiry,
+        bytes calldata signature
     ) external {
         require(isEnabled, "Tipping is disabled");
 
@@ -99,12 +103,16 @@ contract Kriptoin is Ownable, IKriptoin {
             "Tip amount must be greater than or equal to minimumTipAmount"
         );
 
+        require(bytes(senderName).length > 0 && bytes(senderName).length <= 20, "Sender name must be between 1 and 20 characters");
+
         require(
             bytes(message).length >= 1 && bytes(message).length <= 250,
             "Message must be between 1 and 250 characters"
         );
+        
+        UniversalKriptoinV1(factoryAddress).checkApproval(message, expiry, signature);
 
-        uint8 feePercentage = UniversalKriptoin(factoryAddress).feePercentage();
+        uint8 feePercentage = UniversalKriptoinV1(factoryAddress).feePercentage();
 
         uint256 fee = (amount * feePercentage) / 100;
 

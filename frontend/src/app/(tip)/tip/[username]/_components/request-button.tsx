@@ -11,26 +11,26 @@ import { useHasClaimed } from "@/hooks/use-has-claimed";
 export const RequestButton = ({ baseUrl }: { baseUrl: string }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const accountResult = useAccount();
+  const account = useAccount();
 
-  const hasClaimedResult = useHasClaimed(accountResult.address);
+  const hasClaimed = useHasClaimed(account.address);
 
   const handleRequest = async () => {
     setIsLoading(true);
 
-    if (!accountResult.address) {
+    if (!account.address) {
       toast.error("Please connect your wallet");
       return;
     }
 
     const result = await requestToken({
       baseUrl,
-      address: accountResult.address,
+      address: account.address,
     });
 
     setIsLoading(false);
 
-    if (result.error) {
+    if ("error" in result) {
       toast.error(result.error);
       return;
     }
@@ -43,13 +43,13 @@ export const RequestButton = ({ baseUrl }: { baseUrl: string }) => {
   };
 
   if (
-    !accountResult.address ||
-    (hasClaimedResult.status === "success" && hasClaimedResult.hasClaimed)
+    !account.address ||
+    (hasClaimed.status === "success" && hasClaimed.hasClaimed)
   ) {
     return null;
   }
 
-  if (hasClaimedResult.status === "pending") {
+  if (hasClaimed.status === "pending") {
     return (
       <Button disabled>
         <Loader2 className="animate-spin" />

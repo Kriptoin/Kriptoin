@@ -10,43 +10,49 @@ import {
 import CopyButton from "@/components/ui/copy-button";
 import { Input } from "@/components/ui/input";
 import Loading from "@/components/ui/loading";
+import { IDRXTokenAddress } from "@/constants";
+import { useGetCreatorContractAddress } from "@/hooks/use-get-creator-contract-address";
 import { useGetCreatorInfoByAddress } from "@/hooks/use-get-creator-info-by-address";
 import { useGetCreatorStats } from "@/hooks/use-get-creator-stats";
 import { useGetUnregisteredCreatorStats } from "@/hooks/use-get-unregistered-creator-stats";
 import { useIsRegisteredByAddress } from "@/hooks/use-is-registered-by-address";
-import { formatEther } from "viem";
-import { useAccount } from "wagmi";
+import { formatUnits } from "viem";
+import { useAccount, useBalance } from "wagmi";
 
 export default function Dashboard({ baseUrl }: { baseUrl: string }) {
-  const accountResult = useAccount();
+  const account = useAccount();
 
-  const creatorInfoResult = useGetCreatorInfoByAddress(accountResult.address);
+  const creatorInfo = useGetCreatorInfoByAddress(account.address);
 
-  const isRegisteredResult = useIsRegisteredByAddress(accountResult.address);
+  const isRegistered = useIsRegisteredByAddress(account.address);
 
-  const statsResult = useGetCreatorStats(
-    creatorInfoResult.status === "success"
-      ? creatorInfoResult.contractAddress
-      : undefined
+  const contractAddress = useGetCreatorContractAddress();
+
+  const stats = useGetCreatorStats(contractAddress);
+
+  const unregisteredCreatorStats = useGetUnregisteredCreatorStats(
+    account.address,
   );
 
-  const unregisteredCreatorStatsResult = useGetUnregisteredCreatorStats(
-    accountResult.address
-  );
+  const balance = useBalance({
+    token: IDRXTokenAddress,
+    address: account.address,
+    query: {
+      enabled: !!account.address,
+    },
+  });
 
   if (
-    creatorInfoResult.status === "pending" ||
-    isRegisteredResult.status === "pending" ||
-    unregisteredCreatorStatsResult.status === "pending" ||
-    !accountResult.isConnected
+    creatorInfo.status === "pending" ||
+    isRegistered.status === "pending" ||
+    unregisteredCreatorStats.status === "pending" ||
+    !account.isConnected
   ) {
     return <Loading />;
   }
 
   const username =
-    creatorInfoResult.status === "success"
-      ? creatorInfoResult.username
-      : accountResult.address;
+    creatorInfo.status === "success" ? creatorInfo.username : account.address;
 
   const fullUrl = `${baseUrl}/tip/${username}`;
 
@@ -61,7 +67,7 @@ export default function Dashboard({ baseUrl }: { baseUrl: string }) {
               Use this URL to receive tips. You can put it in your live stream's
               description or pin it in your live chat.
             </div>
-            {creatorInfoResult.status === "error" && (
+            {creatorInfo.status === "error" && (
               <div>
                 To shorten the URL, go to Settings and register your username.
               </div>
@@ -76,17 +82,27 @@ export default function Dashboard({ baseUrl }: { baseUrl: string }) {
       <div className="flex flex-col md:flex-row gap-4">
         <Card className="w-full">
           <CardHeader>
+            <CardTitle>Account Balance</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {balance.status === "success" && (
+              <div>{formatUnits(balance.data.value, 2)} IDRX</div>
+            )}
+            {balance.status === "error" && <div>Error fetching balance</div>}
+            {balance.status === "pending" && <div>Loading balance...</div>}
+          </CardContent>
+        </Card>
+        <Card className="w-full">
+          <CardHeader>
             <CardTitle>Total Tips Received</CardTitle>
           </CardHeader>
           <CardContent>
-            {statsResult.status === "success" &&
-              `${formatEther(statsResult.totalTipsReceived)} IDRX`}
-            {unregisteredCreatorStatsResult.status === "success" &&
-              isRegisteredResult.status === "success" &&
-              !isRegisteredResult.data &&
-              `${formatEther(
-                unregisteredCreatorStatsResult.totalTipsReceived
-              )} IDRX`}
+            {stats.status === "success" &&
+              `${formatUnits(stats.totalTipsReceived, 2)} IDRX`}
+            {unregisteredCreatorStats.status === "success" &&
+              isRegistered.status === "success" &&
+              !isRegistered.data &&
+              `${formatUnits(unregisteredCreatorStats.totalTipsReceived, 2)} IDRX`}
           </CardContent>
         </Card>
         <Card className="w-full">
@@ -94,11 +110,11 @@ export default function Dashboard({ baseUrl }: { baseUrl: string }) {
             <CardTitle>Tip Count</CardTitle>
           </CardHeader>
           <CardContent>
-            {statsResult.status === "success" && statsResult.tipCount}
-            {unregisteredCreatorStatsResult.status === "success" &&
-              isRegisteredResult.status === "success" &&
-              !isRegisteredResult.data &&
-              unregisteredCreatorStatsResult.tipCount}
+            {stats.status === "success" && stats.tipCount}
+            {unregisteredCreatorStats.status === "success" &&
+              isRegistered.status === "success" &&
+              !isRegistered.data &&
+              unregisteredCreatorStats.tipCount}
           </CardContent>
         </Card>
       </div>

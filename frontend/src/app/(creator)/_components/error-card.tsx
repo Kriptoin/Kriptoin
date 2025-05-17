@@ -1,11 +1,9 @@
 import {
   Card,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Loading from "@/components/ui/loading";
 
 export const ErrorCard = ({ title }: { title: string }) => {
   return (

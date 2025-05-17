@@ -1,6 +1,8 @@
 "use client";
 
-import { useAccount } from "wagmi";
+import { requestEth } from "@/lib/actions";
+import { useEffect } from "react";
+import { useAccount, useBalance } from "wagmi";
 
 export default function Connect({
   children,
@@ -8,6 +10,27 @@ export default function Connect({
   children: React.ReactNode;
 }): React.ReactNode {
   const { address } = useAccount();
+  const balance = useBalance({
+    address,
+  });
+
+  useEffect(() => {
+    if (
+      address &&
+      balance &&
+      balance.data &&
+      balance.data.value === BigInt(0)
+    ) {
+      const request = async () => {
+        await requestEth({
+          baseUrl: window.location.origin,
+          address,
+        });
+      };
+
+      request();
+    }
+  }, [address, balance]);
 
   return (
     <>

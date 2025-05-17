@@ -5,8 +5,8 @@
 @layer base {
     :root {
         --dark-grey: #101112;
-        --main: #0ea5e9;
-        --secondary: #d2edf5;
+        --main: #6d5858;
+        --secondary: #f5eadd;
         --overlay: rgba(
             0,
             0,
@@ -17,7 +17,7 @@
         --bg: #070707;
         --bw: #fff; /* white and secondary black e.g. utility class variant would be: bg-[#fff] dark:bg-[#212121] */
         --blank: #000; /* blank black and white */
-        --border: #000;
+        --border: #414040;
         --text: #000;
         --mtext: #000; /* text that is placed on background with main color e.g. text color of default button */
         --ring: #000;
@@ -39,7 +39,7 @@
         --bg: #272933;
         --bw: #212121;
         --blank: #fff;
-        --border: #000;
+        --border: #000000;
         --text: #e6e6e6;
         --mtext: #000;
         --ring: #fff;

@@ -10,35 +10,30 @@ import Register from "./_components/register";
 import Username from "./_components/username";
 
 export const Settings = () => {
-  const accountResult = useAccount();
+  const account = useAccount();
 
-  const creatorInfoResult = useGetCreatorInfoByAddress(accountResult.address);
+  const creatorInfo = useGetCreatorInfoByAddress(account.address);
 
   const bioResult = useGetBio({
     contractAddress:
-      creatorInfoResult.status === "success"
-        ? creatorInfoResult.contractAddress
+      creatorInfo.status === "success"
+        ? creatorInfo.contractAddress
         : undefined,
   });
 
-  if (!accountResult.isConnected) {
+  if (!account.isConnected) {
     return <Loading />;
   }
 
   const username =
-    creatorInfoResult.status === "success"
-      ? creatorInfoResult.username
-      : undefined;
+    creatorInfo.status === "success" ? creatorInfo.username : undefined;
 
-  const name =
-    creatorInfoResult.status === "success" ? creatorInfoResult.name : undefined;
+  const name = creatorInfo.status === "success" ? creatorInfo.name : undefined;
 
   const bio = bioResult.status === "success" ? bioResult.bio : "";
 
   const contractAddress =
-    creatorInfoResult.status === "success"
-      ? creatorInfoResult.contractAddress
-      : undefined;
+    creatorInfo.status === "success" ? creatorInfo.contractAddress : undefined;
 
   return (
     <div className="w-full h-full flex flex-col gap-4 py-4">

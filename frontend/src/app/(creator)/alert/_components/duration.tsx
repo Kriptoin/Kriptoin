@@ -17,9 +17,9 @@ import { ChangeEvent, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BaseError, useWriteContract } from "wagmi";
 import { TxButton } from "../../_components/tx-button";
-import { ErrorCard } from "./error-card";
-import { LoadingCard } from "./loading-card";
-import { RegisterCard } from "./register-card";
+import { ErrorCard } from "../../_components/error-card";
+import { LoadingCard } from "../../_components/loading-card";
+import { RegisterCard } from "../../_components/register-card";
 
 export const Duration = ({
   duration,

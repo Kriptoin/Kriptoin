@@ -52,7 +52,7 @@ export default function SideNavItems() {
         ))}
       </div>
       <div className="flex flex-col gap-2">
-        <Link
+        {/* <Link
           href="https://feedback.kriptoin.xyz"
           target="_blank"
           className="mb-0 sm:mb-2"
@@ -61,7 +61,7 @@ export default function SideNavItems() {
             <MessageSquareText />
             <span>Feedback</span>
           </Button>
-        </Link>
+        </Link> */}
         <Link
           href="https://docs.kriptoin.xyz"
           target="_blank"

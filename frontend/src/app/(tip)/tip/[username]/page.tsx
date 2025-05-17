@@ -1,7 +1,8 @@
 import { Metadata } from "next";
 import { headers } from "next/headers";
 import { isAddress } from "viem";
-import { TipPage } from "./_components/tip-page";
+import { AddressTipPage } from "./_components/address-tip-page";
+import { UsernameTipPage } from "./_components/username-tip-page";
 
 export async function generateMetadata({
   params,
@@ -27,5 +28,9 @@ export default async function Page({
   const protocol = host?.includes("localhost") ? "http" : "https";
   const baseUrl = `${protocol}://${host}`;
 
-  return <TipPage username={username} baseUrl={baseUrl} />;
+  return isAddress(username) ? (
+    <AddressTipPage address={username} baseUrl={baseUrl} />
+  ) : (
+    <UsernameTipPage username={username} />
+  );
 }

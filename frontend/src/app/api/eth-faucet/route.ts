@@ -1,21 +1,7 @@
-import { FaucetContractAddress } from "@/constants";
+import { EthFaucetContractAddress } from "@/constants";
+import { account, publicClient, walletClient } from "@/lib/viem";
 import { NextRequest, NextResponse } from "next/server";
-import { BaseError, createPublicClient, createWalletClient, http } from "viem";
-import { privateKeyToAccount } from "viem/accounts";
-import { liskSepolia } from "viem/chains";
-
-const account = privateKeyToAccount(process.env.PRIVATE_KEY! as `0x${string}`);
-
-const walletClient = createWalletClient({
-  account,
-  chain: liskSepolia,
-  transport: http(),
-});
-
-const publicClient = createPublicClient({
-  chain: liskSepolia,
-  transport: http(),
-});
+import { BaseError } from "viem";
 
 const abi = [
   {
@@ -42,7 +28,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const hash = await walletClient.writeContract({
-      address: FaucetContractAddress,
+      address: EthFaucetContractAddress,
       abi,
       functionName: "transfer",
       args: [address],
@@ -57,7 +43,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { error: (error as BaseError).shortMessage || "Transfer failed" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

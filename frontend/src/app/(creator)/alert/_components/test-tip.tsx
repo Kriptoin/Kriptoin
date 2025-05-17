@@ -15,8 +15,8 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { BaseError, useWriteContract } from "wagmi";
 import { TxButton } from "../../_components/tx-button";
-import { LoadingCard } from "./loading-card";
-import { RegisterCard } from "./register-card";
+import { LoadingCard } from "../../_components/loading-card";
+import { RegisterCard } from "../../_components/register-card";
 
 export const TestTip = ({
   creatorInfo,

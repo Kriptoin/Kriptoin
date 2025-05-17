@@ -16,7 +16,7 @@ export default async function Layout({
   return (
     <div className="flex flex-col w-full h-dvh items-center relative">
       <div className="ml-auto m-4 flex items-center gap-4">
-        <RequestButton baseUrl={baseUrl} />
+        {/* <RequestButton baseUrl={baseUrl} /> */}
         <ConnectButton />
       </div>
       <div className="flex items-center justify-center h-full w-full px-4">

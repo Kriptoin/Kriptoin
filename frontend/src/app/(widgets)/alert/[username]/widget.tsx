@@ -2,7 +2,7 @@
 
 import { KriptoinAbi } from "@/abi/KriptoinAbi";
 import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { UniversalKriptoinAddress } from "@/constants";
 import { useGetColors } from "@/hooks/use-get-colors";
 import { useGetCreatorInfoByUsername } from "@/hooks/use-get-creator-info-by-username";
@@ -12,7 +12,7 @@ import { config } from "@/lib/wagmi";
 import { getBlockNumber } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
-import { formatEther, isAddress, zeroAddress } from "viem";
+import { formatUnits, isAddress, zeroAddress } from "viem";
 import { useWatchContractEvent } from "wagmi";
 
 interface Message {
@@ -23,24 +23,28 @@ interface Message {
 }
 
 export default function Widget({ username }: { username: string }) {
-  const result = useGetCreatorInfoByUsername(username);
+  const creatorInfo = useGetCreatorInfoByUsername(username);
 
   const [messageQueue, setMessageQueue] = useState<Message[]>([]);
   const [currentMessage, setCurrentMessage] = useState<Message | null>(null);
   const [isError, setIsError] = useState<boolean>(false);
 
-  const isRegisteredResult = useIsRegisteredByAddress(
+  const isRegistered = useIsRegisteredByAddress(
     isAddress(username) ? username : undefined
   );
 
   const colorsResult = useGetColors({
     contractAddress:
-      result.status === "success" ? result.contractAddress : undefined,
+      creatorInfo.status === "success"
+        ? creatorInfo.contractAddress
+        : undefined,
   });
 
   const durationResult = useGetDurationByContractAddress({
     contractAddress:
-      result.status === "success" ? result.contractAddress : undefined,
+      creatorInfo.status === "success"
+        ? creatorInfo.contractAddress
+        : undefined,
   });
 
   useEffect(() => {
@@ -90,7 +94,10 @@ export default function Widget({ username }: { username: string }) {
 
   useWatchContractEvent({
     abi: KriptoinAbi,
-    address: result.status === "success" ? result.contractAddress : zeroAddress,
+    address:
+      creatorInfo.status === "success"
+        ? creatorInfo.contractAddress
+        : zeroAddress,
     eventName: "TipReceived",
     onError: (error) => {
       setIsError(true);
@@ -106,13 +113,13 @@ export default function Widget({ username }: { username: string }) {
           { senderAddress, senderName, message, amount },
         ]);
     },
-    enabled: result.status === "success",
+    enabled: creatorInfo.status === "success",
   });
 
   const [play] = useSound("/alert.mp3");
 
   const duration =
-    durationResult.status === "success" ? durationResult.duration : 5;
+    durationResult.status === "success" ? durationResult.duration : 15;
 
   useEffect(() => {
     if (currentMessage === null && messageQueue.length > 0) {
@@ -152,8 +159,8 @@ export default function Widget({ username }: { username: string }) {
   }
 
   if (
-    isRegisteredResult.status === "success" &&
-    isRegisteredResult.data &&
+    isRegistered.status === "success" &&
+    isRegistered.data &&
     isAddress(username)
   ) {
     return (
@@ -171,7 +178,7 @@ export default function Widget({ username }: { username: string }) {
     );
   }
 
-  if (result.status === "error" && !isAddress(username)) {
+  if (creatorInfo.status === "error" && !isAddress(username)) {
     return (
       <div className="p-1">
         <Card className="w-full text-center bg-red-500 text-white">
@@ -187,7 +194,7 @@ export default function Widget({ username }: { username: string }) {
     );
   }
 
-  if (result.status === "pending") {
+  if (creatorInfo.status === "pending") {
     return (
       <div className="p-1">
         <Card className="w-full text-center">
@@ -208,20 +215,19 @@ export default function Widget({ username }: { username: string }) {
         className="w-full text-center"
         style={{ backgroundColor: colors.background }}
       >
-        <CardHeader>
-          <CardTitle className="font-normal">
-            <span className="font-medium" style={{ color: colors.secondary }}>
-              {currentMessage.senderName}{" "}
+        <CardHeader className="p-4">
+          <CardTitle className="font-normal flex flex-col gap-2">
+            <span className="font-medium" style={{ color: colors.primary }}>
+              {currentMessage.senderName}
             </span>
-            <span style={{ color: colors.primary }}>tipped </span>
             <span className="font-medium" style={{ color: colors.secondary }}>
-              {formatEther(currentMessage.amount)} IDRX
+              {formatUnits(currentMessage.amount, 2)} IDRX
             </span>
           </CardTitle>
         </CardHeader>
-        <CardContent style={{ color: colors.primary }}>
+        <CardFooter className="text-sm p-4 pt-0 flex-grow items-end justify-center" style={{ color: colors.primary }}>
           {currentMessage.message}
-        </CardContent>
+        </CardFooter>
       </Card>
     </div>
   );

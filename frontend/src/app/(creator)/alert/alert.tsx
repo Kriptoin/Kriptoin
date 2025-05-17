@@ -9,6 +9,8 @@ import { TestTip } from "./_components/test-tip";
 import { useGetCreatorInfo } from "@/hooks/use-get-creator-info";
 import { useAccount } from "wagmi";
 import { useGetCreatorContractAddress } from "@/hooks/use-get-creator-contract-address";
+import { AlertStatus } from "./_components/alert-status";
+import { useGetAlertStatus } from "@/hooks/use-get-alert-status";
 
 export default function Alert({ baseUrl }: { baseUrl: string }) {
   const account = useAccount();
@@ -23,6 +25,8 @@ export default function Alert({ baseUrl }: { baseUrl: string }) {
     contractAddress,
   });
 
+  const alertStatus = useGetAlertStatus();
+
   const username =
     creatorInfo.status === "success" ? creatorInfo.username : account.address;
 
@@ -31,15 +35,13 @@ export default function Alert({ baseUrl }: { baseUrl: string }) {
   return (
     <div className="flex flex-col gap-4 py-4">
       <div className="font-bold block sm:hidden">Alert</div>
-      <div className="w-full flex flex-col md:flex-row gap-4">
+      <div className="w-full flex flex-col xl:flex-row gap-4">
         <AlertUrl fullUrl={fullUrl} username={username} />
         <TestTip creatorInfo={creatorInfo} />
+        <AlertStatus alertStatus={alertStatus} />
       </div>
       <Duration duration={duration} contractAddress={contractAddress} />
-      <WidgetColors
-        colors={colors}
-        contractAddress={contractAddress}
-      />
+      <WidgetColors colors={colors} contractAddress={contractAddress} />
     </div>
   );
 }

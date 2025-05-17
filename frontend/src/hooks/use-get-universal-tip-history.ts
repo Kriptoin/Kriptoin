@@ -1,5 +1,5 @@
-import { formatEther } from "viem";
 import { UniversalKriptoinAbi } from "@/abi/UniversalKriptoinAbi";
+import { formatUnits } from "viem";
 import { useReadContract } from "wagmi";
 import { ErrorReturnType, PendingReturnType } from "./types";
 
@@ -58,7 +58,7 @@ export const useGetUniversalTipHistory = ({
     paginatedTips: result.data[0].map((tip) => ({
       ...tip,
       timestamp: new Date(Number(tip.timestamp) * 1000).toLocaleString(),
-      amount: formatEther(tip.amount),
+      amount: formatUnits(tip.amount, 2),
     })),
     tipLength: result.data[1],
   };

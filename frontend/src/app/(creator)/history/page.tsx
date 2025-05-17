@@ -7,6 +7,9 @@ export const metadata: Metadata = {
 
 export default function HistoryPage() {
   return (
-    <History/>
+    <div className="flex flex-col gap-4 py-4">
+      <div className="font-bold block sm:hidden">Tip History</div>
+      <History />
+    </div>
   );
 }

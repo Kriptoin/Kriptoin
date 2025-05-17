@@ -7,55 +7,47 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Loading from "@/components/ui/loading";
 import { UniversalKriptoinAddress } from "@/constants";
-import { useGetCreatorInfoByAddress } from "@/hooks/use-get-creator-info-by-address";
-import { useIsRegisteredByAddress } from "@/hooks/use-is-registered-by-address";
-import { useAccount } from "wagmi";
 import { HistoryTable } from "./history-table";
+import { useGetCreatorInfo } from "@/hooks/use-get-creator-info";
+import { useIsRegistered } from "@/hooks/use-is-registered";
+import { useAccount } from "wagmi";
+import { LoadingCard } from "../_components/loading-card";
+import { ErrorCard } from "../_components/error-card";
 
 export default function History() {
-  const accountResult = useAccount();
+  const creatorInfo = useGetCreatorInfo();
 
-  const creatorInfoResult = useGetCreatorInfoByAddress(accountResult.address);
+  const isRegistered = useIsRegistered();
 
-  const isRegisteredResult = useIsRegisteredByAddress(accountResult.address);
+  const { address: creatorAddress } = useAccount();
 
   const contractAddress =
-    creatorInfoResult.status === "success"
-      ? creatorInfoResult.contractAddress
+    creatorInfo.status === "success"
+      ? creatorInfo.contractAddress
       : UniversalKriptoinAddress;
 
-  const creatorAddress = accountResult.address;
-
   const isRegisteredCreator =
-    isRegisteredResult.status === "success" ? isRegisteredResult.data : false;
+    isRegistered.status === "success" ? isRegistered.data : false;
+
+  if (isRegistered.status === "pending" || creatorInfo.status === "pending")
+    return <LoadingCard title="Tip History" />;
+
+  if (isRegistered.status === "error") return <ErrorCard title="Tip History" />;
 
   return (
-    <div className="flex flex-col gap-4 py-4">
-      <div className="font-bold block sm:hidden">Tip History</div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Tip History</CardTitle>
-          <CardDescription>
-            View tip messages from your viewers.
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="w-full">
-          {isRegisteredResult.status === "success" &&
-            (creatorInfoResult.status === "success" ||
-              creatorInfoResult.status === "error") && (
-              <HistoryTable
-                contractAddress={contractAddress}
-                creatorAddress={creatorAddress}
-                isRegisteredCreator={isRegisteredCreator}
-              />
-            )}
-          {(isRegisteredResult.status === "pending" ||
-            creatorInfoResult.status === "pending") && <Loading />}
-        </CardContent>
-      </Card>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>Tip History</CardTitle>
+        <CardDescription>View tip messages from your viewers.</CardDescription>
+      </CardHeader>
+      <CardContent className="w-full">
+        <HistoryTable
+          contractAddress={contractAddress}
+          creatorAddress={creatorAddress}
+          isRegisteredCreator={isRegisteredCreator}
+        />
+      </CardContent>
+    </Card>
   );
 }

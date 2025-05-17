@@ -1,7 +1,7 @@
-import { ErrorReturnType, PendingReturnType } from "./types";
 import { KriptoinAbi } from "@/abi/KriptoinAbi";
+import { formatUnits } from "viem";
 import { useReadContract } from "wagmi";
-import { formatEther } from "viem";
+import { ErrorReturnType, PendingReturnType } from "./types";
 
 type Tips = readonly {
   senderAddress: `0x${string}`;
@@ -60,7 +60,7 @@ export const useGetTipHistory = ({
     paginatedTips: result.data[0].map((tip) => ({
       ...tip,
       timestamp: new Date(Number(tip.timestamp) * 1000).toLocaleString(),
-      amount: formatEther(tip.amount),
+      amount: formatUnits(tip.amount, 2),
     })),
     tipLength: result.data[1],
   };

@@ -18,10 +18,10 @@ import toast from "react-hot-toast";
 import { BaseError, useWriteContract } from "wagmi";
 import { TxButton } from "../../_components/tx-button";
 import { ColorPicker } from "./color-picker";
-import { ErrorCard } from "./error-card";
+import { ErrorCard } from "../../_components/error-card";
 import { ExampleAlert } from "./example-alert";
-import { LoadingCard } from "./loading-card";
-import { RegisterCard } from "./register-card";
+import { LoadingCard } from "../../_components/loading-card";
+import { RegisterCard } from "../../_components/register-card";
 
 export const WidgetColors = ({
   colors,

@@ -21,7 +21,7 @@ export const columns: ColumnDef<History>[] = [
   },
   {
     accessorKey: "amount",
-    header: "Amount (EDU)",
+    header: "Amount (IDRX)",
   },
   {
     accessorKey: "message",

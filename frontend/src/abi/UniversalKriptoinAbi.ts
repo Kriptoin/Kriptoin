@@ -11,6 +11,33 @@ export const UniversalKriptoinAbi = [
     type: "constructor",
   },
   {
+    inputs: [],
+    name: "ECDSAInvalidSignature",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "length",
+        type: "uint256",
+      },
+    ],
+    name: "ECDSAInvalidSignatureLength",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "s",
+        type: "bytes32",
+      },
+    ],
+    name: "ECDSAInvalidSignatureS",
+    type: "error",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -145,6 +172,19 @@ export const UniversalKriptoinAbi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "backendSigner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "string",
@@ -168,6 +208,29 @@ export const UniversalKriptoinAbi = [
     name: "changeUsername",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "string",
+        name: "message",
+        type: "string",
+      },
+      {
+        internalType: "uint256",
+        name: "expiry",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
+      },
+    ],
+    name: "checkApproval",
+    outputs: [],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -462,8 +525,31 @@ export const UniversalKriptoinAbi = [
         name: "amount",
         type: "uint256",
       },
+      {
+        internalType: "uint256",
+        name: "expiry",
+        type: "uint256",
+      },
+      {
+        internalType: "bytes",
+        name: "signature",
+        type: "bytes",
+      },
     ],
     name: "sendTip",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_backendSigner",
+        type: "address",
+      },
+    ],
+    name: "setBackendSigner",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

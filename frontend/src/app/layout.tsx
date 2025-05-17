@@ -19,7 +19,7 @@ export default async function RootLayout(props: { children: ReactNode }) {
   
   return (
     <html lang="en">
-      <body className={`${font.className} bg-white antialiased`}>
+      <body className={`${font.className} bg-transparent antialiased`}>
         <Toaster position="top-right" />
         <Providers>{props.children}</Providers>
       </body>

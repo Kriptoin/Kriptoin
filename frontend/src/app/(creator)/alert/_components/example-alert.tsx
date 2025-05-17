@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface ExampleAlertProps {
   colors: {
@@ -15,21 +15,20 @@ export const ExampleAlert = ({ colors }: ExampleAlertProps) => {
       style={{ backgroundColor: colors.background }}
       id="example-alert"
     >
-      <CardHeader>
-        <CardTitle className="font-normal">
-          <span className="font-medium" style={{ color: colors.secondary }}>
-            Kriptoin{" "}
+      <CardHeader className="p-4">
+        <CardTitle className="font-normal flex flex-col gap-2">
+          <span className="font-normal" style={{ color: colors.primary }}>
+            Kriptoin
           </span>
-          <span style={{ color: colors.primary }}>tipped </span>
           <span className="font-medium" style={{ color: colors.secondary }}>
-            10 EDU
+            5.000 IDRX
           </span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="text-sm" style={{ color: colors.primary }}>
+      <CardFooter className="text-sm p-4 pt-0 flex-grow items-end" style={{ color: colors.primary }}>
         Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque possimus
         dignissimos repudiandae unde autem eius inventore cumque.
-      </CardContent>
+      </CardFooter>
     </Card>
   );
 };

@@ -10,16 +10,16 @@ import { waitForTransactionReceipt } from "@wagmi/core";
 import { Loader2, Zap } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { parseEther } from "viem";
+import { parseUnits } from "viem";
 import { BaseError, useAccount, useWriteContract } from "wagmi";
 import { type History } from "../columns";
 
 export const ActionCell = ({ row }: { row: Row<History> }) => {
-  const accountResult = useAccount();
+  const account = useAccount();
 
-  const isRegisteredResult = useIsRegisteredByAddress(accountResult.address);
+  const isRegistered = useIsRegisteredByAddress(account.address);
 
-  const creatorInfoResult = useGetCreatorInfoByAddress(accountResult.address);
+  const creatorInfo = useGetCreatorInfoByAddress(account.address);
 
   const { writeContract } = useWriteContract();
 
@@ -28,22 +28,17 @@ export const ActionCell = ({ row }: { row: Row<History> }) => {
   const { original } = row;
   const { senderName, amount, message } = original;
 
-  if (
-    isRegisteredResult.status === "pending" ||
-    creatorInfoResult.status === "pending"
-  ) {
+  if (isRegistered.status === "pending" || creatorInfo.status === "pending") {
     return <Loader2 className="animate-spin" />;
   }
 
   const contractAddress =
-    creatorInfoResult.status === "success"
-      ? creatorInfoResult.contractAddress
-      : undefined;
+    creatorInfo.status === "success" ? creatorInfo.contractAddress : undefined;
 
   const handleTrigger = () => {
     setIsLoading(true);
 
-    if (isRegisteredResult.data) {
+    if (isRegistered.data) {
       if (!contractAddress) {
         setIsLoading(false);
         toast.error("Contract address is undefined");
@@ -55,7 +50,7 @@ export const ActionCell = ({ row }: { row: Row<History> }) => {
           address: contractAddress,
           abi: KriptoinAbi,
           functionName: "emitTipEvent",
-          args: [senderName, message, parseEther(amount)],
+          args: [senderName, message, parseUnits(amount, 2)],
         },
         {
           onSuccess: async (data) => {
@@ -80,7 +75,7 @@ export const ActionCell = ({ row }: { row: Row<History> }) => {
         }
       );
     } else {
-      if (!accountResult.address) {
+      if (!account.address) {
         setIsLoading(false);
         toast.error("Account address is undefined");
         return;
@@ -91,12 +86,7 @@ export const ActionCell = ({ row }: { row: Row<History> }) => {
           address: UniversalKriptoinAddress,
           abi: UniversalKriptoinAbi,
           functionName: "emitTipEvent",
-          args: [
-            accountResult.address,
-            senderName,
-            message,
-            parseEther(amount),
-          ],
+          args: [account.address, senderName, message, parseUnits(amount, 2)],
         },
         {
           onSuccess: async (data) => {

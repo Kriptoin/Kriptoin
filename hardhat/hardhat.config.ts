@@ -21,11 +21,26 @@ const config: HardhatUserConfig = {
       url: `https://rpc.sepolia-api.lisk.com`,
       accounts: [TESTNET_PRIVATE_KEY],
     },
+    liskMainnet: {
+      url: `https://rpc.api.lisk.com`,
+      accounts: [TESTNET_PRIVATE_KEY],
+    },
   },
   etherscan: {
     apiKey: {
       liskSepolia: "random-api-key",
+      liskMainnet: "random-api-key",
     },
+    customChains: [
+      {
+        network: "liskMainnet",
+        chainId: 1135,
+        urls: {
+          apiURL: "https://blockscout.lisk.com/api",
+          browserURL: "https://blockscout.lisk.com",
+        },
+      },
+    ],
   },
   sourcify: {
     enabled: false,

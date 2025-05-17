@@ -1,15 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
 import "./libraries/StringUtils.sol";
-import "./Kriptoin.sol";
+import "./KriptoinV1.sol";
 import "./interfaces/IKriptoin.sol";
 import "./libraries/KriptoinLib.sol";
 
-contract UniversalKriptoin is Ownable, IKriptoin {
+contract UniversalKriptoinV1 is Ownable, IKriptoin {
     using StringUtils for string;
 
     struct CreatorInfo {
@@ -30,6 +32,8 @@ contract UniversalKriptoin is Ownable, IKriptoin {
     IERC20 public token;
     uint256 public minimumTipAmount;
     uint8 public feePercentage;
+    
+    address public backendSigner;
 
     event ContractDeployed(
         address indexed creatorAddress,
@@ -38,8 +42,10 @@ contract UniversalKriptoin is Ownable, IKriptoin {
 
     constructor(address _token) Ownable(msg.sender) {
         token = IERC20(_token);
-        minimumTipAmount = 1000 ether;
+        minimumTipAmount = 1000 * 100; // 1000 IDRX
         feePercentage = 1;
+        
+        backendSigner = 0x77DEA859659ef832872F7d274B4dFc8a5B1e0431;
     }
 
     // @dev Function to set the token address
@@ -52,7 +58,7 @@ contract UniversalKriptoin is Ownable, IKriptoin {
     // @param _amount - The minimum tip amount in wei
     function setMinimumTipAmount(uint256 _amount) external onlyOwner {
         require(
-            _amount < 50000 ether,
+            _amount < 50000 * 100,
             "Minimum tip amount must be less than 50000 IDR"
         );
 
@@ -69,6 +75,12 @@ contract UniversalKriptoin is Ownable, IKriptoin {
 
         feePercentage = _feePercentage;
     }
+    
+    /// @dev Function to set the backend signer address
+    /// @param _backendSigner - The backend signer address to set
+    function setBackendSigner(address _backendSigner) external onlyOwner {
+        backendSigner = _backendSigner;
+    }
 
     /// @dev Function to deploy a new Kriptoin contract
     /// @param username - The username of the creator
@@ -76,8 +88,8 @@ contract UniversalKriptoin is Ownable, IKriptoin {
         string calldata username
     ) external returns (address) {
         require(
-            bytes(username).length >= 3 && bytes(username).length <= 10,
-            "Username must be between 3 and 10 characters"
+            bytes(username).length >= 2 && bytes(username).length <= 15,
+            "Username must be between 2 and 15 characters"
         );
         
         require(username.isAlphanumeric(), "Username must be alphanumeric");
@@ -92,7 +104,7 @@ contract UniversalKriptoin is Ownable, IKriptoin {
             "Username already registered"
         );
         
-        Kriptoin kriptoin = new Kriptoin(
+        KriptoinV1 kriptoin = new KriptoinV1(
             address(this),
             totalTipsReceived[msg.sender],
             minimumTipAmount
@@ -117,17 +129,35 @@ contract UniversalKriptoin is Ownable, IKriptoin {
         
         return address(kriptoin);
     }
+    
+    /// @dev Function to check if a message has been approved by the backend
+    /// @param message - The message to check
+    /// @param expiry - The expiry time of the approval
+    /// @param signature - The signature of the approval
+    function checkApproval(string calldata message, uint256 expiry, bytes calldata signature) public view {
+        require (block.timestamp < expiry, "Approval expired");
+    
+        bytes32 messageHash = keccak256(abi.encodePacked(message, expiry));
+        bytes32 ethSignedMessageHash = MessageHashUtils.toEthSignedMessageHash(messageHash);
+        
+        address recovered = ECDSA.recover(ethSignedMessageHash, signature);
+        require(recovered == backendSigner, "Invalid signature");
+    }
 
     /// @dev Function to send a tip to an unregistered creator
     /// @param creatorAddress - The address of the creator
     /// @param senderName - The name of the sender
     /// @param message - The message sent with the tip
     /// @param amount - The amount of the tip
+    /// @param expiry - The expiry time of the approval
+    /// @param signature - The signature of the approval
     function sendTip(
         address creatorAddress,
         string calldata senderName,
         string calldata message,
-        uint256 amount
+        uint256 amount,
+        uint256 expiry,
+        bytes calldata signature
     ) external {
         require(
             !isRegistered[creatorAddress],
@@ -143,11 +173,15 @@ contract UniversalKriptoin is Ownable, IKriptoin {
             amount >= minimumTipAmount,
             "Tip amount must be greater than or equal to minimumTipAmount"
         );
+        
+        require(bytes(senderName).length > 0 && bytes(senderName).length <= 20, "Sender name must be between 1 and 20 characters");
 
         require(
             bytes(message).length >= 1 && bytes(message).length <= 250,
             "Message must be between 1 and 250 characters"
         );
+        
+        checkApproval(message, expiry, signature);
 
         uint256 fee = (amount * feePercentage) / 100;
 
