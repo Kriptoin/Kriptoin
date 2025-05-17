@@ -204,12 +204,12 @@ export default function Page() {
                   What is Kriptoin?
                 </AccordionTrigger>
                 <AccordionContent>
-                  Kriptoin is a decentralized platform that enables educators
-                  and content creators to monetize their educational content
-                  directly from their live streams. It offers a web3-first
-                  approach, low platform fees, instant withdrawals, and a simple
-                  integration process. Kriptoin ensures that your support goes
-                  directly to content creators with minimal platform fees.
+                  Kriptoin is a decentralized platform that enables streamers to
+                  receive cryptocurrency tips during live streams. It offers a
+                  web3-first approach, low platform fees, instant withdrawals,
+                  and a simple integration process. Kriptoin ensures that your
+                  support goes directly to content creators with minimal
+                  platform fees.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="faq-2">
